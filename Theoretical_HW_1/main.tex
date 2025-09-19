@@ -1,0 +1,381 @@
+\documentclass[a4paper]{article}
+\usepackage[affil-it]{authblk}
+\usepackage[backend=bibtex,style=numeric]{biblatex}
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{margin=1.5cm, vmargin={0pt,1cm}}
+\setlength{\topmargin}{-1cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\textheight}{25.3cm}
+
+\addbibresource{citation.bib}
+
+\begin{document}
+% =================================================
+\title{Numerical Analysis homework \# 1}
+% 第一次
+\author{Wang Hengning 3230104148
+  \thanks{Electronic address: \texttt{whning@zju.edu.cn}}}
+\affil{Computational mathematics 2301, Zhejiang University }
+
+
+\date{Due time: \today}
+
+\maketitle
+
+%\begin{abstract}
+%    The abstract is not necessary for the theoretical homework, 
+%    but for the programming project, 
+%    you are encouraged to write one.      
+%\end{abstract}
+
+
+% ============================================
+% \section*{I. Briefly repeat the problem}
+
+\section*{I. Analysis of the Bisection Method on the Interval $[1.5, 3.5]$}
+% II. 对区间 $[1.5, 3.5]$ 上的二分法分析
+
+\subsection*{Width of the interval}
+% 第 n 步的区间宽度
+
+Given the initial interval $[a_0, b_0] = [1.5, 3.5]$, the initial width is $W_0 = b_0 - a_0 = 2$.
+% 给定初始区间 $[a_0, b_0] = [1.5, 3.5]$，初始宽度为 $W_0 = b_0 - a_0 = 2$。
+The interval width is halved at each step, so the width at step $n$, $W_n$, is:
+% 区间宽度在每一步迭代中减半，因此第 $n$ 步的宽度 $W_n$ 为：
+\[
+W_n = \frac{W_0}{2^n} = \frac{2}{2^n} = \frac{1}{2^{n-1}}
+\]
+
+\subsection*{Supremum of the error}
+% 根与区间中点的距离上确界
+
+At step $n$, let the interval be $[a_n, b_n]$ and the midpoint $c_n = (a_n+b_n)/2$. The root $r$ satisfies $r \in [a_n, b_n]$.
+% 在第 $n$ 步，设区间为 $[a_n, b_n]$，中点为 $c_n = (a_n+b_n)/2$。根 $r$ 满足 $r \in [a_n, b_n]$。
+The distance $|r - c_n|$ is maximized when $r$ is located at an endpoint of the interval.
+% 当根 $r$ 位于区间端点时，距离 $|r - c_n|$ 达到最大值。
+This gives the supremum of the error as 1/2 the interval width.
+% 由此可得误差的上确界为区间宽度的一半。
+\[
+\sup|r - c_n| = c_n - a_n = b_n - c_n = \frac{b_n - a_n}{2} = \frac{W_n}{2^1} = \frac{W_{n-1}}{2^2} = \frac{1}{2^n}
+\]
+
+% 222222222222222222222222222222
+
+\section*{II. Proof for the Number of Steps for a Given Relative Error}
+% II. 给定相对误差所需步数的证明
+
+Denote the root by $r$, we need to find the number of steps $n$ such that $|r-c_n|/|r|$ is no greater than $\epsilon$.
+% 我们需要找到使此误差不大于 $\epsilon$ 的步数 $n$。
+\[
+\frac{|r-c_n|}{|r|} \le \epsilon
+\]
+First, the absolute error is bounded by half the interval width at step $n$.
+% 首先，我们为分子和分母建立界。绝对误差的上界为第 $n$ 步区间宽度的一半。
+\[
+|r - c_n| \le \frac{b_n - a_n}{2} = \frac{b_0 - a_0}{2^{n+1}}
+\]
+Given that $r \in [a_0, b_0]$ and $a_0 > 0$, the magnitude of the root is bounded below by $a_0$.
+% 给定 $r \in [a_0, b_0]$ 且 $a_0 > 0$，根的绝对值 $|r|$ 的下界为 $a_0$。
+\[
+|r| \ge a_0
+\]
+Therefore, we can conclude that: 
+% 结合这些界，可得到相对误差的一个上界。
+\[
+\frac{|r-c_n|}{|r|} \le \frac{(b_0 - a_0) / 2^{n+1}}{a_0} = \frac{b_0 - a_0}{a_0 \cdot 2^{n+1}}
+\]
+To guarantee the desired accuracy, we enforce this upper bound to be less than or equal to $\epsilon$.
+% 为保证所需精度，我们强制此上界小于或等于 $\epsilon$。
+\[
+\frac{b_0 - a_0}{a_0 \cdot 2^{n+1}} \le \epsilon
+\]
+\[
+\frac{b_0 - a_0}{\epsilon \cdot a_0} \le 2^{n+1}
+\]
+Taking the logarithm of both sides yields:
+% 对两边取对数可得：
+\[
+\log\left(\frac{b_0 - a_0}{\epsilon \cdot a_0}\right) \le \log(2^{n+1})
+\]
+\[
+\log(b_0 - a_0) - \log\epsilon - \log a_0 \le (n+1)\log 2
+\]
+Rearranging terms :
+\[
+n \ge \frac{\log(b_0 - a_0) - \log\epsilon - \log a_0}{\log 2} - 1
+\]
+This completes the proof.
+% 证明完毕。
+
+
+%33333333333333333333333333333333333
+\section*{III. Application of Newton's Method}
+% II. 牛顿法应用
+
+The problem is to find a root for the polynomial equation $p(x) = 4x^3 - 2x^2 + 3 = 0$ with the starting point $x_0 = -1$.
+% 本题为求解多项式方程 $p(x) = 4x^3 - 2x^2 + 3 = 0$ 的一个根，初始点为 $x_0 = -1$。
+We have the derivative of $p(x)$:
+% 首先，我们计算 $p(x)$ 的导数。
+\[
+p'(x) = 12x^2 - 4x
+\]
+The iteration formula for this specific problem is:
+% 牛顿法的迭代公式为 $x_{k+1} = x_k - p(x_k)/p'(x_k)$。针对本题，该公式为：
+\[
+x_{k+1} = x_k - \frac{4x_k^3 - 2x_k^2 + 3}{12x_k^2 - 4x_k}
+\]
+
+Starting with $x_0 = -1$, we perform 4 iterations. The results are organized in the following table. 
+% 从 $x_0 = -1$ 开始，我们执行四次迭代。结果整理在下表中。
+
+\begin{center}
+\begin{tabular}{c | c c c}
+\hline
+Iteration, $k$ & $x_k$ & $p(x_k)$ & $p'(x_k)$ \\
+\hline
+0 & -1.000000 & -3.000000 & 16.000000 \\
+1 & -0.812500 & -0.465820 & 11.171875 \\
+2 & -0.770804 & -0.020138 & 10.212886 \\
+3 & -0.768832 & -0.000044 & 10.168568 \\
+4 & -0.768828 & -0.000000 & 10.168472 \\
+\hline
+\end{tabular}
+\end{center}
+
+After four iterations, the approximation of the root is $x_4$.
+% 经过四次迭代后，根的近似值为 $x_4$。
+\[
+x_4 \approx -0.768828
+\]
+
+
+%44444444444444444444444444
+\section*{IV. Convergence Analysis of a Modified Newton's Method}
+% II. 修正牛顿法的收敛性分析
+
+Let $r$ be the root, with $f(r)=0$, and let the error be $e_n = x_n - r$.
+% 设 $r$ 为真根，满足 $f(r)=0$，并设误差为 $e_n = x_n - r$。
+The error recurrence relation derived from the iteration formula is:
+% 从迭代公式推导出的误差递推关系为：
+\[
+e_{n+1} = x_{n+1} - r = e_n - \frac{f(x_n)}{f'(x_0)}
+\]
+Expanding $f(x_n) = f(r+e_n)$ as a Taylor series around $r$ gives:
+% 将 $f(x_n) = f(r+e_n)$ 在 $r$ 附近进行泰勒级数展开，可得：
+\[
+f(x_n) = f'(r)e_n + \frac{f''(r)}{2}e_n^2 + O(e_n^3)
+\]
+% 将此展开式代入递推关系，得到误差方程。
+\[
+e_{n+1} = e_n - \frac{f'(r)e_n + \frac{f''(r)}{2}e_n^2 + O(e_n^3)}{f'(x_0)}
+\]
+\[
+e_{n+1} = \left(1 - \frac{f'(r)}{f'(x_0)}\right)e_n - \left(\frac{f''(r)}{2f'(x_0)}\right)e_n^2 + O(e_n^3)
+\]
+By comparing with the form $e_{n+1} = Ce_n^s$, we identify the exponent of the dominant term as $s$ and its coefficient as $C$.Therefore, this iteration formula is \textbf{linearly convergent}.
+% 通过与形式 $e_{n+1} = Ce_n^s$ 进行比较，我们可确定主导项的指数为 $s$，其系数为 $C$。
+\[
+s = 1
+\]
+\[
+C = 1 - \frac{f'(r)}{f'(x_0)}
+\]
+
+% 55555555555555
+
+\section*{V. Convergence of the Iteration $x_{n+1} = \tan^{-1} x_n$}
+% V. 迭代式 $x_{n+1} = \tan^{-1} x_n$ 的收敛性
+
+The iteration $x_{n+1} = \tan^{-1}x_n$ has a unique fixed point $\alpha$ that solves $\tan^{-1}\alpha = \alpha$, which is $\alpha=0$.
+% 迭代式 $x_{n+1} = \tan^{-1}x_n$ 存在唯一的不动点 $\alpha$ 满足 $\tan^{-1}\alpha = \alpha$，解得 $\alpha=0$。
+If $x_0 = 0$, the sequence converges trivially. Thus, we only consider the case where $x_0 \ne 0$.
+% x0=0时很明显是收敛于0的，所以我们只考虑不为0的情况。
+To analyze convergence, we consider the absolute value of the terms. For any $x \ne 0$, it is a known property that:
+% 为分析收敛性，我们考虑各项的绝对值。对于任意 $x \ne 0$，存在一个已知性质：
+\[
+|\tan^{-1}x| < |x|
+\]
+Applying this property to the iteration for any $x_n \ne 0$ gives a strictly \textbf{contractive} relationship.
+% 将此性质应用于迭代过程，对于任意 $x_n \ne 0$ 可得一个严格的压缩关系。
+\[
+|x_{n+1}| = |\tan^{-1}x_n| < |x_n|
+\]
+This shows that the sequence of absolute values, $\{|x_n|\}$, is \textbf{strictly decreasing} and \textbf{bounded below by 0}.
+% 这表明绝对值序列 $\{|x_n|\}$ 是严格单调递减且有下界0的。
+Therefore, the sequence of absolute values must converge to 0.
+% 因此，该绝对值序列必然收敛于0。
+\[
+\lim_{n \to \infty} |x_n| = 0
+\]
+This implies that the sequence $\{x_n\}$ itself converges to 0 for all initial values $x_0 \in (-\pi/2, \pi/2)$.
+% 这意味着序列 $\{x_n\}$ 本身对于所有初始值 $x_0 \in (-\pi/2, \pi/2)$ 都收敛于0。
+
+% 6666666666666666666666
+
+\section*{VI. Analysis of a Continued Fraction}
+% VI. 连分数分析
+
+Assuming the sequence converges to a value $x$, this value must be a fixed point satisfying the relation:
+% 假设序列收敛于值 $x$，则该值必须是满足以下关系的不动点：
+\[
+x_n = \frac{1}{p + \frac{1}{p + \dots}} \implies x = \frac{1}{p+x}
+\]
+The solutions are trivial.
+% 使用二次公式可求得其解。
+\[
+x = \frac{-p \pm \sqrt{p^2 + 4}}{2}
+\]
+Since the sequence of convergents $x_n$ is always positive for $p > 1$, its limit $x$ must be positive. We thus select the positive root.
+% 由于当 $p > 1$ 时，收敛序列 $x_n$ 恒为正，其极限 $x$ 必为正。因此我们选取正根。
+\[
+x = \frac{-p + \sqrt{p^2+4}}{2}
+\]
+
+To prove convergence, we analyze the iteration $x_{n+1} = g(x_n)$ with the function $g(x) = 1/(p+x)$.
+% 为证明收敛性，我们分析迭代式 $x_{n+1} = g(x_n)$，其中函数为 $g(x) = 1/(p+x)$。
+We will show that $g(x)$ is a contraction mapping for $x \ge 0$. First, we find the derivative.
+% 我们将证明 $g(x)$ 在 $x \ge 0$ 上是一个压缩映射。首先计算其导数。
+\[
+g'(x) = -\frac{1}{(p+x)^2}
+\]
+The magnitude of the derivative is \textbf{bounded}.For $p > 1$ and any $x \ge 0$, the denominator $(p+x)^2 > p^2$.
+% 对于 $p > 1$ 和任意 $x \ge 0$，分母 $(p+x)^2 > p^2$。
+This provides a uniform bound on the magnitude of the derivative.
+% 这为导数的绝对值提供了一个一致上界。
+
+% 该导数的绝对值有界。
+\[
+|g'(x)| = \frac{1}{(p+x)^2} < \frac{1}{p^2}
+\]
+
+Since $p>1$, we have $p^2 > 1$, which implies that  $1/p^2 < 1$ and $k = \frac{1}{p^2} < 1$.
+% 因为 $p>1$，所以 $p^2 > 1$，这意味着上界 $1/p^2$ 小于1。
+Because $|g'(x)| \le k < 1$ for all $x \ge 0$, the function $g(x)$ is a contraction mapping on $[0, \infty)$.
+% 因为对于所有 $x \ge 0$ 都有 $|g'(x)| \le k < 1$，函数 $g(x)$ 是在 $[0, \infty)$ 上的一个压缩映射。
+Therefore, by the \textbf{Contraction Mapping Theorem}, the sequence converges for any initial $x_0 \ge 0$.
+% 因此，根据压缩映射定理，该迭代对于任意初始值 $x_0 \ge 0$ 均收敛。
+
+
+
+% 77777777777777777777777777777
+\section*{VII. Bisection Method Analysis when the Interval Contains Zero}
+% VII. 当区间包含零点时二分法的分析
+
+\subsection*{Derivation of the Inequality for the Number of Steps}
+% (a) 步数不等式的推导
+
+The upper bound for the relative error is:
+% 相对误差的上界为：
+\[
+\frac{|r-c_n|}{|r|} \le \frac{b_0 - a_0}{|r| \cdot 2^{n+1}}
+\]
+Under the condition $a_0 < 0 < b_0$, the root $r$ can be arbitrarily close to 0. The supremum of the error bound is therefore not finite.
+% 在 $a_0 < 0 < b_0$ 的条件下，根 $r$ 可以任意接近0。因此，该误差上界的上确界是无穷的。
+\[
+\sup_{r \in [a_0,b_0]} \left( \frac{b_0 - a_0}{|r| \cdot 2^{n+1}} \right) \to \infty \quad \text{as } r \to 0
+\]
+Thus, no general inequality for $n$ exists that can guarantee the relative error is bounded by a given $\epsilon$.
+% 因此，不存在一个能保证相对误差有界于给定 $\epsilon$ 的普适性步数 $n$ 的不等式。
+
+\subsection*{Appropriateness of Relative Error}
+% (b) 相对误差的适用性
+
+Relative error is an inappropriate measure when the root $r$ is near zero.
+% 当根 $r$ 接近于零时，相对误差是一个不合适的衡量标准。
+For a small but fixed absolute error $|r-c_n| = \delta > 0$, the relative error diverges as $r \to 0$.
+% 对于一个虽小但固定的绝对误差 $|r-c_n| = \delta > 0$，当 $r \to 0$ 时，相对误差是发散的。
+\[
+\lim_{r \to 0} \frac{|r-c_n|}{|r|} = \lim_{r \to 0} \frac{\delta}{|r|} = \infty
+\]
+Absolute error, $|r-c_n|$, is the proper measure in this case.
+% 在这种情况下，绝对误差 $|r-c_n|$ 才是合适的衡量标准。
+
+%88888888888888888888
+
+\section*{VIII. Newton's Method for Roots of Multiplicity k}
+% VIII. 牛顿法处理k重根
+
+\subsection*{Detection of a Multiple Zero}
+% (a) 多重根的检测
+
+A multiple zero can be detected by two primary observations during the iteration process.
+% 在迭代过程中，可以通过两个主要现象来检测多重根。
+First, the convergence of the sequence $\{x_n\}$ to the root $r$ is slow. It degrades from quadratic to linear.
+% 首先，序列 $\{x_n\}$ 收敛到根 $r$ 的速度很慢，从二次收敛退化为线性收敛。
+Second, as the iterates $x_n$ approach the root $r$, both the function values $f(x_n)$ and \textbf{the derivative values $f'(x_n)$ converge to 0}.
+% 其次，当迭代值 $x_n$ 接近根 $r$ 时，函数值 $f(x_n)$ 和导数值 $f'(x_n)$ 都同时趋近于零。
+For a simple root, $f'(x_n)$ would converge to a non-zero constant, $f'(r)$.
+% 对于单根， $f'(x_n)$ 会收敛到一个非零常数 $f'(r)$。
+
+\subsection*{Proof of Restored Quadratic Convergence}
+% (b) 恢复二次收敛性的证明
+
+We are given the modified Newton's iteration for a root of multiplicity $k$.
+% 给定针对 k 重根的修正牛顿迭代法。
+\[
+x_{n+1} = g(x_n) \quad \text{where} \quad g(x) = x - k\frac{f(x)}{f'(x)}
+\]
+To prove quadratic convergence, we must show that $g'(r)=0$.
+% 为证明二次收敛性，我们必须证明 $g'(r)=0$。
+The derivative of $g(x)$ is:
+% $g(x)$ 的导数为：
+\[
+g'(x) = 1 - k \left[ \frac{f'(x)f'(x) - f(x)f''(x)}{[f'(x)]^2} \right] = 1 - k \left[ 1 - \frac{f(x)f''(x)}{[f'(x)]^2} \right]
+\]
+\[
+g'(x) = 1 - k + k\frac{f(x)f''(x)}{[f'(x)]^2}
+\]
+Since $r$ is a root of multiplicity $k$, we can write $f(x) = (x-r)^k h(x)$ for some function $h(x)$ where $h(r) \ne 0$.
+% 由于 $r$ 是一个 k 重根，我们可以将 $f(x)$ 写为 $f(x) = (x-r)^k h(x)$，其中某个函数 $h(x)$ 满足 $h(r) \ne 0$。
+The leading terms of the derivatives near $x=r$ are:
+% 在 $x=r$ 附近，各阶导数的主项为：
+\[
+f(x) \approx (x-r)^k h(r)
+\]
+\[
+f'(x) \approx k(x-r)^{k-1} h(r)
+\]
+\[
+f''(x) \approx k(k-1)(x-r)^{k-2} h(r)
+\]
+\[
+\lim_{x \to r} \frac{f(x)f''(x)}{[f'(x)]^2} = \frac{(x-r)^k h(r) \cdot k(k-1)(x-r)^{k-2} h(r)}{[k(x-r)^{k-1} h(r)]^2}
+\]
+\[
+= \frac{k(k-1)(x-r)^{2k-2}h(r)^2}{k^2(x-r)^{2k-2}h(r)^2} = \frac{k-1}{k}
+\]
+Substituting this back for $g'(r)$:
+% 将此极限代回到 $g'(r)$ 的表达式中：
+\[
+g'(r) = 1 - k + k \left(\frac{k-1}{k}\right) = 1 - k + (k-1) = 0
+\]
+Since $g'(r)=0$ (and assuming $g''(r) \ne 0$), the fixed-point iteration for $g(x)$ converges quadratically.
+% 由于 $g'(r)=0$ (并假设 $g''(r) \ne 0$)，函数 $g(x)$ 的不动点迭代是二次收敛的。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% ===============================================
+\section*{ \center{\normalsize {Acknowledgement}} }
+Honestly, the \textbf{translation} was done using LLM tools, but the answers and solutions were written by myself.
+
+%20250919
+
+
+%\printbibliography
+
+
+\end{document}
