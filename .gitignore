@@ -25,6 +25,7 @@
 *.bat
 *.fdb_latexmk
 *.synctex.gz
+*.synctex(busy)
 _minted-*
 
 # Common temporary and editor files
