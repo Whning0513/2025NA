@@ -20,6 +20,8 @@
 *.out
 *.snm
 *.fls
+*.xml
+*.bib
 *.bat
 *.fdb_latexmk
 *.synctex.gz
