@@ -1,0 +1,32 @@
+# C++ binaries and intermediate files
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.lib
+*.dylib
+
+# LaTeX compilation artifacts
+*.aux
+*.bbl
+*.blg
+*.brf
+*.log
+*.lot
+*.lof
+*.toc
+*.nav
+*.out
+*.snm
+*.fls
+*.bat
+*.fdb_latexmk
+*.synctex.gz
+_minted-*
+
+# Common temporary and editor files
+*~
+*.bak
+*.tmp
+*.swp
