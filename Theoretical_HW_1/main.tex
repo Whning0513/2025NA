@@ -255,114 +255,114 @@ Because $|g'(x)| \le k < 1$ for all $x \ge 0$, the function $g(x)$ is a contract
 % 因为对于所有 $x \ge 0$ 都有 $|g'(x)| \le k < 1$，函数 $g(x)$ 是在 $[0, \infty)$ 上的一个压缩映射。
 Therefore, by the \textbf{Contraction Mapping Theorem}, the sequence converges for any initial $x_0 \ge 0$.
 % 因此，根据压缩映射定理，该迭代对于任意初始值 $x_0 \ge 0$ 均收敛。
+\section*{VII. Bisection Method Analysis When Initial Interval Contains Zero}
+% 七、二分法在初始区间包含零点时的分析
 
+\subsection*{Analysis of the Relative Error Measure}
+% 相对误差度量的分析
 
-
-% 77777777777777777777777777777
-\section*{VII. Bisection Method Analysis when the Interval Contains Zero}
-% VII. 当区间包含零点时二分法的分析
-
-\subsection*{Derivation of the Inequality for the Number of Steps}
-% (a) 步数不等式的推导
-
-The upper bound for the relative error is:
-% 相对误差的上界为：
+Using the symbols from Problem II, the relative error $\epsilon_n$ and the absolute error bound $|\Delta\alpha|$ are defined by:
+% 沿用问题 II 的符号，相对误差 $\epsilon_n$ 和绝对误差 $|\Delta\alpha|$ 的定义为：
 \[
-\frac{|r-c_n|}{|r|} \le \frac{b_0 - a_0}{|r| \cdot 2^{n+1}}
+\epsilon_n = \left|\frac{x_n - \alpha}{\alpha}\right| = \frac{|\Delta \alpha|}{|\alpha|}
 \]
-Under the condition $a_0 < 0 < b_0$, the root $r$ can be arbitrarily close to 0. The supremum of the error bound is therefore not finite.
-% 在 $a_0 < 0 < b_0$ 的条件下，根 $r$ 可以任意接近0。因此，该误差上界的上确界是无穷的。
+
+We know that the absolute error is bounded by:
+% 我们知道绝对误差的上界为：
 \[
-\sup_{r \in [a_0,b_0]} \left( \frac{b_0 - a_0}{|r| \cdot 2^{n+1}} \right) \to \infty \quad \text{as } r \to 0
+|\Delta \alpha| \leq \frac{|b_0 - a_0|}{2^{n+1}}, \quad e_n \leq \epsilon
 \]
-Thus, no general inequality for $n$ exists that can guarantee the relative error is bounded by a given $\epsilon$.
-% 因此，不存在一个能保证相对误差有界于给定 $\epsilon$ 的普适性步数 $n$ 的不等式。
 
-\subsection*{Appropriateness of Relative Error}
-% (b) 相对误差的适用性
-
-Relative error is an inappropriate measure when the root $r$ is near zero.
-% 当根 $r$ 接近于零时，相对误差是一个不合适的衡量标准。
-For a small but fixed absolute error $|r-c_n| = \delta > 0$, the relative error diverges as $r \to 0$.
-% 对于一个虽小但固定的绝对误差 $|r-c_n| = \delta > 0$，当 $r \to 0$ 时，相对误差是发散的。
+To guarantee the relative error $\epsilon_n$ is no greater than $\epsilon$ ($\epsilon_n \leq \epsilon$):
+% 为保证相对误差 $\epsilon_n$ 不超过 $\epsilon$：
 \[
-\lim_{r \to 0} \frac{|r-c_n|}{|r|} = \lim_{r \to 0} \frac{\delta}{|r|} = \infty
+\frac{|\Delta \alpha|}{|\alpha|} \leq \frac{|b_0 - a_0|}{2^{n+1}|\alpha|} \leq \epsilon
 \]
-Absolute error, $|r-c_n|$, is the proper measure in this case.
-% 在这种情况下，绝对误差 $|r-c_n|$ 才是合适的衡量标准。
 
-%88888888888888888888
+This inequality can be rearranged to find the required number of steps $n$, implying that:
+% 对此不等式进行整理，可得到所需迭代步数 $n$ 的下限：
+\[
+n \geq \frac{\log(|b_0 - a_0|) - \log \epsilon - \log |\alpha|}{\log 2} - 1
+\]
 
-\section*{VIII. Newton's Method for Roots of Multiplicity k}
-% VIII. 牛顿法处理k重根
+This result implies that the number of steps $n$ explicitly depends on the magnitude of the root $|\alpha|$, so the relative error is not a good measure in this case.
+% 这个结果表明所需的步数 $n$ 显式地依赖于根 $|\alpha|$ 的大小，因此在这种情况下相对误差不是一个好的度量。
+Especially when $\alpha$ is around $0$, the relative error is $\infty$ in the limit case $\alpha \to 0$.
+% 特别是当 $\alpha$ 接近 $0$ 时，在 $\alpha \to 0$ 的极限情况下相对误差将趋于无穷。
+Instead, the absolute error $e^{abs}_n = |x_n - \alpha|$ is a good stand-in.
+% 因此，绝对误差 $e^{abs}_n = |x_n - \alpha|$ 是一个恰当的替代度量。
 
+\subsection*{Derivation of the Absolute Error Inequality}
+% 绝对误差不等式的推导
+
+The absolute error is bounded by half the interval length after $n$ steps:
+% 绝对误差的上界为第 $n$ 步后区间长度的一半：
+\[
+e^{abs}_n = |\alpha - c_n| \leq \frac{b_n - a_n}{2} = \frac{b_0 - a_0}{2^{n+1}}
+\]
+
+To ensure the absolute error $e^{abs}_n \le \epsilon_{abs}$, we require:
+% 为确保绝对误差 $e^{abs}_n \le \epsilon_{abs}$，我们要求：
+\[
+\frac{b_0 - a_0}{2^{n+1}} \leq \epsilon_{abs}
+\]
+
+Solving for $n$ by taking the logarithm yields:
+% 通过取对数解出 $n$：
+\[
+n \geq \frac{\log(b_0 - a_0) - \log(\epsilon_{abs})}{\log 2} - 1
+\]
+
+
+
+
+\section*{VIII. Modified Newton's Method for Multiple Roots}
+% 八、修正牛顿法处理多重根
+A root $\alpha$ is considered a root of multiplicity $k$ for a function $f(x) \in C^{k+1}$ if the function can be expressed in the form:
+
+\begin{equation}
+    f(x) = (x-\alpha)^k g(x), \quad \text{with } g(x) \in C^1, g(\alpha) \ne 0. \tag{14}+
+\end{equation}
 \subsection*{Detection of a Multiple Zero}
-% (a) 多重根的检测
+Considering the iterative process, we have
+\begin{align}
+  &x_{n+1} - \alpha = x_n - \alpha - \frac{f(x_n)}{f'(x_n)} \nonumber \\
+  &e_{n+1} \approx e_n \frac{(k-1) g(x_n)}{k g(x_n) + (x_n - \alpha) g'(x_n)} \nonumber \\
+  \implies &\lim_{n \to \infty} \frac{e_{n+1}}{e_n} = \frac{k-1}{k} < 1, \tag{15}
+\end{align}
 
-A multiple zero can be detected by two primary observations during the iteration process.
-% 在迭代过程中，可以通过两个主要现象来检测多重根。
-First, the convergence of the sequence $\{x_n\}$ to the root $r$ is slow. It degrades from quadratic to linear.
-% 首先，序列 $\{x_n\}$ 收敛到根 $r$ 的速度很慢，从二次收敛退化为线性收敛。
-Second, as the iterates $x_n$ approach the root $r$, both the function values $f(x_n)$ and \textbf{the derivative values $f'(x_n)$ converge to 0}.
-% 其次，当迭代值 $x_n$ 接近根 $r$ 时，函数值 $f(x_n)$ 和导数值 $f'(x_n)$ 都同时趋近于零。
-For a simple root, $f'(x_n)$ would converge to a non-zero constant, $f'(r)$.
-% 对于单根， $f'(x_n)$ 会收敛到一个非零常数 $f'(r)$。
+The behavior indicated by (15) can be analyzed more rigorously. By the definition of a root of multiplicity $k$, Taylor's theorem for $f(x)$ and $f'(x)$ around $\alpha$ gives:
+$$
+f(x_n) = \frac{f^{(k)}(\alpha)}{k!}(x_n-\alpha)^k + O\left((x_n-\alpha)^{k+1}\right)
+$$
+$$
+f'(x_n) = \frac{f^{(k)}(\alpha)}{(k-1)!}(x_n-\alpha)^{k-1} + O\left((x_n-\alpha)^{k}\right)
+$$
+From these expansions, a primary detection criterion emerges. For a multiple root ($k \ge 2$), it is evident that as $x_n \to \alpha$, both $f(x_n) \to 0$ and $f'(x_n) \to 0$. This is in direct contrast to a simple root ($k=1$), for which $f'(\alpha) \ne 0$ and thus $\lim_{n\to\infty} f'(x_n) \ne 0$.
 
-\subsection*{Proof of Restored Quadratic Convergence}
-% (b) 恢复二次收敛性的证明
+Furthermore, the ratio in the Newton's step can be approximated using the leading terms of the expansions:
+$$
+\frac{f(x_n)}{f'(x_n)} \approx \frac{\frac{f^{(k)}(\alpha)}{k!}(x_n-\alpha)^k}{\frac{f^{(k)}(\alpha)}{(k-1)!}(x_n-\alpha)^{k-1}} = \frac{(k-1)!}{k!}(x_n-\alpha) = \frac{1}{k}(x_n-\alpha) = \frac{1}{k}e_n.
+$$
+Substituting this directly into the error evolution formula provides a concise derivation for the linear convergence:
+\begin{align*}
+e_{n+1} &= e_n - \frac{f(x_n)}{f'(x_n)} \\
+&\approx e_n - \frac{1}{k}e_n = \left(1 - \frac{1}{k}\right)e_n = \left(\frac{k-1}{k}\right)e_n.
+\end{align*}
+This rigorously confirms the result in (15) and shows that the observed linear convergence is a direct consequence of the fact that $f'(x_n)$ approaches zero at a rate precisely one order lower than $f(x_n)$.
 
-We are given the modified Newton's iteration for a root of multiplicity $k$.
-% 给定针对 k 重根的修正牛顿迭代法。
-\[
-x_{n+1} = g(x_n) \quad \text{where} \quad g(x) = x - k\frac{f(x)}{f'(x)}
-\]
-To prove quadratic convergence, we must show that $g'(r)=0$.
-% 为证明二次收敛性，我们必须证明 $g'(r)=0$。
-The derivative of $g(x)$ is:
-% $g(x)$ 的导数为：
-\[
-g'(x) = 1 - k \left[ \frac{f'(x)f'(x) - f(x)f''(x)}{[f'(x)]^2} \right] = 1 - k \left[ 1 - \frac{f(x)f''(x)}{[f'(x)]^2} \right]
-\]
-\[
-g'(x) = 1 - k + k\frac{f(x)f''(x)}{[f'(x)]^2}
-\]
-Since $r$ is a root of multiplicity $k$, we can write $f(x) = (x-r)^k h(x)$ for some function $h(x)$ where $h(r) \ne 0$.
-% 由于 $r$ 是一个 k 重根，我们可以将 $f(x)$ 写为 $f(x) = (x-r)^k h(x)$，其中某个函数 $h(x)$ 满足 $h(r) \ne 0$。
-The leading terms of the derivatives near $x=r$ are:
-% 在 $x=r$ 附近，各阶导数的主项为：
-\[
-f(x) \approx (x-r)^k h(r)
-\]
-\[
-f'(x) \approx k(x-r)^{k-1} h(r)
-\]
-\[
-f''(x) \approx k(k-1)(x-r)^{k-2} h(r)
-\]
-\[
-\lim_{x \to r} \frac{f(x)f''(x)}{[f'(x)]^2} = \frac{(x-r)^k h(r) \cdot k(k-1)(x-r)^{k-2} h(r)}{[k(x-r)^{k-1} h(r)]^2}
-\]
-\[
-= \frac{k(k-1)(x-r)^{2k-2}h(r)^2}{k^2(x-r)^{2k-2}h(r)^2} = \frac{k-1}{k}
-\]
-Substituting this back for $g'(r)$:
-% 将此极限代回到 $g'(r)$ 的表达式中：
-\[
-g'(r) = 1 - k + k \left(\frac{k-1}{k}\right) = 1 - k + (k-1) = 0
-\]
-Since $g'(r)=0$ (and assuming $g''(r) \ne 0$), the fixed-point iteration for $g(x)$ converges quadratically.
-% 由于 $g'(r)=0$ (并假设 $g''(r) \ne 0$)，函数 $g(x)$ 的不动点迭代是二次收敛的。
-
-
-
-
-
-
-
-
-
-
-
+\subsection*{Restoring Quadratic Convergence}
+To restore the quadratic rate of convergence, we can apply a modified Newton's method. The analysis of this modified process is as follows:
+\begin{align*}
+x_{n+1} - \alpha &= x_n - k\frac{f(x_n)}{f'(x_n)} - \alpha \\
+&= x_n - k\frac{(x_n - \alpha)g(x_n)}{(x_n - \alpha)g'(x_n) + kg(x_n)} - \alpha\\
+&= (x_n - \alpha)\left[1 - \frac{kg(x_n)}{(x_n - \alpha)g'(x_n) + kg(x_n)}\right] \\
+&= (x_n - \alpha)^2  g'(x_n)  \frac{1}{(x_n - \alpha)g'(x_n) + kg(x_n)},
+\end{align*}
+This leads to the following limit for the error ratio, confirming that quadratic convergence is recovered:
+$$
+\Rightarrow \lim_{n\to\infty} \frac{|e_{n+1}|}{e_n^2} = \lim_{n\to\infty} \left|\frac{g'(x_n)}{(x_n - \alpha)g'(x_n) + kg(x_n)}\right| = \left|\frac{g'(\alpha)}{kg(\alpha)}\right|.
+$$
 
 
 
@@ -371,7 +371,7 @@ Since $g'(r)=0$ (and assuming $g''(r) \ne 0$), the fixed-point iteration for $g(
 % ===============================================
 \section*{ \center{\normalsize {Acknowledgement}} }
 Honestly, the \textbf{translation} was done using LLM tools, but the answers and solutions were written by myself.
-
+This version is edited out on 9th Oct.
 %20250919
 
 
