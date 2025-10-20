@@ -614,10 +614,8 @@ The assumption must be false, and therefore, for any $p \in \mathbb{P}_n^a$, we 
 
 
 \section*{XI. Proof of the Degree Elevation Property for Bernstein Polynomials}
-% XI. 伯恩斯坦多项式升阶性质的证明
 
 The proof begins by expanding the right-hand side (RHS) of the identity using the definition of a Bernstein basis polynomial, $b_{n,k}(t) = \binom{n}{k}t^k(1-t)^{n-k}$.
-% 证明从恒等式右侧（RHS）展开开始，使用伯恩斯坦基多项式的定义 $b_{n,k}(t) = \binom{n}{k}t^k(1-t)^{n-k}$。
 \[
 \text{RHS} = \frac{n-k}{n}b_{n,k}(t) + \frac{k+1}{n}b_{n,k+1}(t)
 \]
@@ -626,12 +624,10 @@ The proof begins by expanding the right-hand side (RHS) of the identity using th
 \]
 
 For the first term's coefficient:
-% 对于第一项的系数：
 \[
 \frac{n-k}{n}\binom{n}{k} = \frac{n-k}{n} \frac{n!}{k!(n-k)!} = \frac{n-k}{n} \frac{n(n-1)!}{k!(n-k)(n-k-1)!} = \frac{(n-1)!}{k!(n-k-1)!} = \binom{n-1}{k}
 \]
 For the second term's coefficient:
-% 对于第二项的系数：
 \[
 \frac{k+1}{n}\binom{n}{k+1} = \frac{k+1}{n} \frac{n!}{(k+1)!(n-k-1)!} = \frac{k+1}{n} \frac{n(n-1)!}{(k+1)k!(n-k-1)!} = \frac{(n-1)!}{k!(n-k-1)!} = \binom{n-1}{k}
 \]
@@ -647,24 +643,18 @@ For the second term's coefficient:
 \text{RHS} = \binom{n-1}{k}t^k(1-t)^{(n-1)-k} = b_{n-1,k}(t) =\text{LHS}
 \]
 The final expression is the definition of $b_{n-1,k}(t)$, which is the left-hand side (LHS) of the identity. This completes the proof.
-% 最终的表达式即为 $b_{n-1,k}(t)$ 的定义，也就是恒等式的左侧（LHS）。证明完毕。
-
 
 \section*{XII. Proof of the Integral Property of Bernstein Basis Polynomials}
-% XII. 伯恩斯坦基多项式积分性质的证明
 
 Let $I_{n,k}$ denote the integral of the Bernstein basis polynomial $b_{n,k}(t)$ over the interval $[0,1]$.
-% 令 $I_{n,k}$ 表示伯恩斯坦基多项式 $b_{n,k}(t)$ 在区间 $[0,1]$ 上的积分。
 \[
 I_{n,k} = \int_0^1 b_{n,k}(t) dt = \binom{n}{k} \int_0^1 t^k (1-t)^{n-k} dt
 \]
 We apply integration by parts to the integral, with $u=(1-t)^{n-k}$ and $dv=t^k dt$. This gives $du=-(n-k)(1-t)^{n-k-1}dt$ and $v=t^{k+1}/(k+1)$.
-% 我们对该积分使用分部积分法，令 $u=(1-t)^{n-k}$ 且 $dv=t^k dt$。可得 $du=-(n-k)(1-t)^{n-k-1}dt$ 且 $v=t^{k+1}/(k+1)$。
 \[
 I_{n,k} = \binom{n}{k} \left[ \left. \frac{t^{k+1}(1-t)^{n-k}}{k+1} \right|_0^1 + \frac{n-k}{k+1} \int_0^1 t^{k+1} (1-t)^{n-k-1} dt \right]
 \]
 The boundary term evaluates to zero for $k < n$. Thus, the expression simplifies to:
-% 对于 $k < n$，边界项的值为零。因此，表达式简化为：
 \[
 I_{n,k} = \frac{n-k}{k+1} \binom{n}{k} \int_0^1 t^{k+1} (1-t)^{n-(k+1)} dt
 \]
@@ -677,29 +667,22 @@ I_{n,k} = \frac{n-k}{k+1} \binom{n}{k} \int_0^1 t^{k+1} (1-t)^{n-(k+1)} dt
 I_{n,k} = \binom{n}{k+1} \int_0^1 t^{k+1} (1-t)^{n-(k+1)} dt = I_{n,k+1}
 \]
 This relation holds for $k = 0, 1, \dots, n-1$, implying that the value of the integral $I_{n,k}$ is constant for all $k$.
-% 该关系对 $k = 0, 1, \dots, n-1$ 均成立，意味着积分 $I_{n,k}$ 的值对所有 $k$ 都是一个常数。
 To find this constant value, we use the partition of unity property of Bernstein basis polynomials:
-% 为求得此常数值，我们利用伯恩斯坦基多项式的单位分解性质：
 \[
 \sum_{k=0}^n b_{n,k}(t) = 1
 \]
 Integrating this identity over $[0,1]$ yields:
-% 将此恒等式在 $[0,1]$ 上积分可得：
 \[
 \int_0^1 \sum_{k=0}^n b_{n,k}(t) dt = \sum_{k=0}^n \int_0^1 b_{n,k}(t) dt = \int_0^1 1 dt = 1
 \]
 Since all $n+1$ integrals in the sum are equal, we have:
-% 由于和式中所有 $n+1$ 个积分均相等，我们有：
 \[
 (n+1) I_{n,k} = 1
 \]
 This leads to the final result, which is independent of $k$.
-% 这便导出了与 $k$ 无关的最终结果。
 \[
 \int_0^1 b_{n,k}(t) dt = \frac{1}{n+1}
 \]
-
-
 
 
 
