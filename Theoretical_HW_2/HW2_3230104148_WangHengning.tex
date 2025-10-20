@@ -43,26 +43,15 @@
 The function values at the nodes are $f(x_0) = f(1) = 1$ and $f(x_1) = f(2) = \frac{1}{2}$.
 % 节点处的函数值为 $f(x_0) = f(1) = 1$ 和 $f(x_1) = f(2) = \frac{1}{2}$。
 
-The Lagrange form is:
-% 线性插值多项式 $p_1(f; x)$ 的 Lagrange 形式为：
 \[
 p_1(f; x) = f(x_0)\frac{x-x_1}{x_0-x_1} + f(x_1)\frac{x-x_0}{x_1-x_0}
 \]
 
 \[
-p_1(f; x) = 1 \cdot \frac{x-2}{1-2} + \frac{1}{2} \cdot \frac{x-1}{2-1} = -(x-2) + \frac{1}{2}(x-1) = -\frac{1}{2}x + \frac{3}{2}
+p_1(f; x) = -(x-2) + \frac{1}{2}(x-1) = -\frac{1}{2}x + \frac{3}{2}
 \]
-
-The remainder term for the linear interpolation, $R_1(x) = f(x) - p_1(f; x)$, is given by:
-% 线性插值的余项 $R_1(x) = f(x) - p_1(f; x)$ 由以下公式给出：
 \[
-R_1(x) = f(x) - p_1(f; x) = \frac{f''(\xi(x))}{2}(x - x_0)(x - x_1), \quad \xi(x) \in (x_0, x_1) = (1, 2)
-\]
-
-First, we calculate the explicit expression for the remainder $R_1(x)$:
-% 首先，我们计算余项 $R_1(x)$ 的显式表达式：
-\[
-R_1(x) = \frac{1}{x} - \left(-\frac{1}{2}x + \frac{3}{2}\right) = \frac{1}{x} + \frac{x}{2} - \frac{3}{2} = \frac{2 + x^2 - 3x}{2x} = \frac{(x-1)(x-2)}{2x}
+R_1(x) = \frac{1}{x} - \left(-\frac{1}{2}x + \frac{3}{2}\right) = \frac{(x-1)(x-2)}{2x}
 \]
 
 \[
@@ -82,19 +71,14 @@ Substituting the expression for the second derivative, $f''(\xi(x)) = \frac{2}{(
 \[
 \frac{2}{(\xi(x))^3} = \frac{1}{x} \implies (\xi(x))^3 = 2x
 \]
-Thus, the explicit form for $\xi(x)$ is:
-% 因此，$\xi(x)$ 的显式形式为：
+Thus:
 \[
 \xi(x) = \sqrt[3]{2x}, \quad x \in (1, 2)
 \]
 
 \subsection*{ii) Extension and Calculation of Extrema}
 % ii) 延拓与极值计算
-
-The function $\xi(x) = \sqrt[3]{2x}$ can be continuously extended to the closed interval $[x_0, x_1] = [1, 2]$.
-% 函数 $\xi(x) = \sqrt[3]{2x}$ 可以连续延拓到闭区间 $[x_0, x_1] = [1, 2]$。
-
-Since $\xi(x)$ is a monotonically increasing function on $[1, 2]$, its minimum and maximum values occur at the endpoints:
+Since $\xi(x)$ is a \textbf{monotonically} increasing function on $[1, 2]$, its minimum and maximum values occur at the endpoints,  its maximum value occurs at the left endpoint $x=1$:
 % 由于 $\xi(x)$ 在 $[1, 2]$ 上是单调递增函数，其最小值和最大值发生在端点：
 \[
 \min_{x \in [1, 2]} \xi(x) = \xi(1) = \sqrt[3]{2 \cdot 1} = \sqrt[3]{2}
@@ -102,12 +86,6 @@ Since $\xi(x)$ is a monotonically increasing function on $[1, 2]$, its minimum a
 \[
 \max_{x \in [1, 2]} \xi(x) = \xi(2) = \sqrt[3]{2 \cdot 2} = \sqrt[3]{4}
 \]
-
-Finally, we determine the maximum value of $f''(\xi(x))$ on $[1, 2]$. From the previous step, we established that $f''(\xi(x)) = \frac{1}{x}$.
-% 最后，我们确定 $f''(\xi(x))$ 在 $[1, 2]$ 上的最大值。从上一步可知 $f''(\xi(x)) = \frac{1}{x}$。
-
-The function $\frac{1}{x}$ is monotonically decreasing on $[1, 2]$, so its maximum value occurs at the left endpoint $x=1$:
-% 函数 $\frac{1}{x}$ 在 $[1, 2]$ 上是单调递减函数，因此其最大值出现在左端点 $x=1$：
 \[
 \max_{x \in [1, 2]} f''(\xi(x)) = \max_{x \in [1, 2]} \left(\frac{1}{x}\right) = \frac{1}{1} = 1
 \]
@@ -118,13 +96,13 @@ The function $\frac{1}{x}$ is monotonically decreasing on $[1, 2]$, so its maxim
 \section*{II. Construction of a Non-negative Interpolating Polynomial}
 % II. 非负插值多项式的构造
 
-We are tasked with finding a polynomial $p \in \mathbb{P}_{2n}^+$ such that it interpolates the given data points $(x_i, f_i)$ for $i=0, 1, \dots, n$, where $f_i \ge 0$.
+To find a polynomial $p \in \mathbb{P}_{2n}^+$ such that it interpolates the given data points $(x_i, f_i)$ for $i=0, 1, \dots, n$, where $f_i \ge 0$.
 % 我们的任务是找到一个多项式 $p \in \mathbb{P}_{2n}^+$，使其能够对给定的数据点 $(x_i, f_i)$（其中 $i=0, 1, \dots, n$ 且 $f_i \ge 0$）进行插值。
 
-Let $l_k(x)$ for $k=0, 1, \dots, n$ be the Lagrange basis polynomials corresponding to the distinct nodes $\{x_j\}_{j=0}^n$. These polynomials satisfy the property $l_k(x_j) = \delta_{kj}$.
+Let $l_k(x)$ for $k=0, 1, \dots, n$ be the \textbf{Lagrange basis polynomials} corresponding to the distinct nodes $\{x_j\}_{j=0}^n$. These polynomials satisfy the property $l_k(x_j) = \delta_{kj}$.
 % 令 $l_k(x)$（其中 $k=0, 1, \dots, n$）为与不同节点 $\{x_j\}_{j=0}^n$ 相对应的拉格朗日基本多项式。这些多项式满足性质 $l_k(x_j) = \delta_{kj}$。
 
-\subsection*{First Construction}
+\subsection*{Construction A}
 % 第一种构造方法
 
 Consider the polynomial defined as a sum of squares:
@@ -146,13 +124,13 @@ p(x_i) = \sum_{k=0}^{n} f_k l_k^2(x_i) = f_i l_i^2(x_i) + \sum_{k \neq i} f_k l_
 This construction satisfies all requirements.
 % 此构造满足所有要求。
 
-\subsection*{Second Construction}
+\subsection*{Construction B}
 % 第二种构造方法
 
 Alternatively, consider the polynomial formed by squaring a sum:
 % 作为替代，考虑通过对一个和式进行平方来构造多项式：
 \[
-p(x) = \left( \sum_{k=0}^{n} \sqrt{f_k} l_k(x) \right)^2
+p(x) = \left( \sum_{k=0}^{n} \sqrt{f_k} \times l_k(x) \right)^2
 \]
 Let $S(x) = \sum_{k=0}^{n} \sqrt{f_k} l_k(x)$. Since each $l_k(x)$ is of degree $n$, the degree of $S(x)$ is at most $n$. Therefore, the degree of $p(x) = [S(x)]^2$ is at most $2n$.
 % 令 $S(x) = \sum_{k=0}^{n} \sqrt{f_k} l_k(x)$。由于每个 $l_k(x)$ 的次数为 $n$，所以 $S(x)$ 的次数至多为 $n$。因此，$p(x) = [S(x)]^2$ 的次数至多为 $2n$。
@@ -178,12 +156,10 @@ This alternative also fulfills all the problem's conditions.
 % 归纳证明
 
 Let the statement be $P(n): f[t, t+1, \dots, t+n] = \frac{(e-1)^n}{n!}e^t$.
-% 设命题为 $P(n): f[t, t+1, \dots, t+n] = \frac{(e-1)^n}{n!}e^t$。
-
 The base case $n=0$ is trivial, as $f[t] = e^t = \frac{(e-1)^0}{0!}e^t$.
-% 基础情形 $n=0$ 是显然的，因为 $f[t] = e^t = \frac{(e-1)^0}{0!}e^t$。
-
 Assume $P(n)$ holds for some $n \ge 0$. For $n+1$, the recursive definition of divided differences is:
+% 设命题为 $P(n): f[t, t+1, \dots, t+n] = \frac{(e-1)^n}{n!}e^t$。
+% 基础情形 $n=0$ 是显然的，因为 $f[t] = e^t = \frac{(e-1)^0}{0!}e^t$。
 % 假设 $P(n)$ 对某个 $n \ge 0$ 成立。对于 $n+1$，均差的递归定义为：
 \[
 f[t, \dots, t+n+1] = \frac{f[t+1, \dots, t+n+1] - f[t, \dots, t+n]}{n+1}
@@ -222,19 +198,9 @@ For $f(x)=e^x$, the $n$-th derivative is $f^{(n)}(x)=e^x$. Equating the two expr
 Solving for $\xi$ directly gives:
 % 直接求解 $\xi$ 可得：
 \[
-\xi = n \ln(e-1)
+\xi = n \ln(e-1) > n \ln(1.7) = \frac{n}{2} \ln(2.89) > \frac{n}{2} \ln(e) = \frac{n}{2}
 \]
-To compare $\xi$ with the midpoint $n/2$, we analyze the term $\ln(e-1)$.
-% 为将 $\xi$ 与中点 $n/2$ 进行比较，我们分析 $\ln(e-1)$ 这一项。
-Since $e \approx 2.718$ and $e^{1/2} = \sqrt{e} \approx 1.648$, we have $e-1 > e^{1/2}$.
-% 由于 $e \approx 2.718$ 且 $e^{1/2} = \sqrt{e} \approx 1.648$，我们有 $e-1 > e^{1/2}$。
-Applying the natural logarithm to this inequality shows that $\ln(e-1) > 1/2$.
-% 对该不等式应用自然对数表明 $\ln(e-1) > 1/2$。
-Therefore, the position of $\xi$ is determined by:
-% 因此，$\xi$ 的位置由以下关系确定：
-\[
-\xi = n \ln(e-1) > n \cdot \frac{1}{2} = \frac{n}{2}
-\]
+
 The point $\xi$ is located to the right of the midpoint of the interval $(0,n)$.
 % 点 $\xi$ 位于区间 $(0,n)$ 中点的右侧。
 
@@ -250,16 +216,13 @@ The given data points are $(0, 5)$, $(1, 3)$, $(3, 5)$, and $(4, 12)$.
 The divided differences are computed and organized in the following table:
 % 计算均差并整理成下表：
 \[
-\begin{array}{c|cccc}
-x_i & f(x_i) & f[x_i, x_{i+1}] & f[x_i, \dots, x_{i+2}] & f[x_i, \dots, x_{i+3}] \\
+\begin{array}{c|c|cccc}
+i & x_i & f[x_i] & f[x_{i-1}, x_i] & f[x_{i-2}, \dots, x_i] & f[x_{i-3}, \dots, x_i] \\
 \hline
-0 & 5 & & & \\
-& & -2 & & \\
-1 & 3 & & 1 & \\
-& & 1 & & 1/4 \\
-3 & 5 & & 2 & \\
-& & 7 & & \\
-4 & 12 & & & \\
+0 & 0 & 5 & & & \\
+1 & 1 & 3 & -2 & & \\
+2 & 3 & 5 & 1 & 1 & \\
+3 & 4 & 12 & 7 & 2 & 1/4 \\
 \end{array}
 \]
 The Newton form of the interpolating polynomial $p_3(x)$ is constructed using the top diagonal of the table.
@@ -291,8 +254,7 @@ Setting the derivative to zero, $p'_3(x) = 0$, yields the critical points.
 \[
 x^2 - 3 = 0 \implies x = \pm\sqrt{3}
 \]
-The problem suggests a minimum in the interval $(1,3)$. Since $\sqrt{3} \approx 1.732$ is within this interval, we select it as our candidate.
-% 题目暗示在区间 $(1,3)$ 内存在一个最小值。由于 $\sqrt{3} \approx 1.732$ 在此区间内，我们选择它作为候选点。
+
 To confirm it is a minimum, we check the second derivative:
 % 为确认其为最小值，我们检查二阶导数：
 \[
@@ -327,20 +289,15 @@ f'(1)=7, \quad f''(1)=42, \quad f'(2)=448
 We construct the divided difference table for the nodes $z = \{0, 1, 1, 1, 2, 2\}$. For repeated nodes $z_i=z_{i+k}$, the higher-order differences are defined using derivatives, such as $f[z_i, \dots, z_{i+k}] = f^{(k)}(z_i)/k!$.
 % 我们为节点序列 $z = \{0, 1, 1, 1, 2, 2\}$ 构建均差表。对于重复节点 $z_i=z_{i+k}$，高阶均差由导数定义，例如 $f[z_i, \dots, z_{i+k}] = f^{(k)}(z_i)/k!$。
 \[
-\begin{array}{c|cccccc}
-z_i & f[z_i] & \text{1st ord.} & \text{2nd ord.} & \text{3rd ord.} & \text{4th ord.} & \text{5th ord.} \\
+\begin{array}{c|c|cccccc}
+i & z_i & f[z_i] & \text{1st} & \text{2nd} & \text{3rd} & \text{4th} & \text{5th} \\
 \hline
-0 & 0 & & & & & \\
-& & 1 & & & & \\
-1 & 1 & & 6 & & & \\
-& & f'(1)=7 & & 15 & & \\
-1 & 1 & & f''(1)/2=21 & & 42 & \\
-& & f'(1)=7 & & 99 & & 30 \\
-1 & 1 & & 120 & & 102 & \\
-& & 127 & & 201 & & \\
-2 & 128 & & 321 & & & \\
-& & f'(2)=448 & & & & \\
-2 & 128 & & & & & \\
+0 & 0 & 0 & & & & & \\
+1 & 1 & 1 & 1 & & & & \\
+2 & 1 & 1 & 7 & 6 & & & \\
+3 & 1 & 1 & 7 & 21 & 15 & & \\
+4 & 2 & 128 & 127 & 120 & 99 & 42 & \\
+5 & 2 & 128 & 448 & 321 & 201 & 102 & 30 \\
 \end{array}
 \]
 The final entry in the table gives the desired value.
@@ -360,7 +317,7 @@ f[z_0, \dots, z_n] = \frac{f^{(n)}(\xi)}{n!} \quad \text{for some } \xi \in (\mi
 For this problem, we have $n=5$ and the nodes are within the interval $(0,2)$. The 5th derivative of $f(x)$ is calculated as:
 % 对于本题，$n=5$，且节点位于区间 $(0,2)$ 内。函数 $f(x)$ 的五阶导数计算如下：
 \[
-f^{(5)}(x) = (7 \cdot 6 \cdot 5 \cdot 4 \cdot 3) x^2 = 2520x^2
+f^{(5)}(x) = 2520x^2
 \]
 By substituting the computed divided difference and $n=5$ into the theorem, we get an equation for $\xi$.
 % 将计算出的均差值和 $n=5$ 代入定理，我们得到一个关于 $\xi$ 的方程。
@@ -389,18 +346,14 @@ The Hermite interpolation problem is defined by the nodes $z = \{0, 1, 1, 3, 3\}
 The required derivative values are $f'(1)=-1$ and $f'(3)=0$. The divided difference table is constructed as follows:
 % 所需的导数值为 $f'(1)=-1$ 和 $f'(3)=0$。均差表构造如下：
 \[
-\begin{array}{c|ccccc}
-z_i & f[z_i] & \text{1st} & \text{2nd} & \text{3rd} & \text{4th} \\
+\begin{array}{c|c|ccccc}
+i & z_i & f[z_i] & \text{1st} & \text{2nd} & \text{3rd} & \text{4th} \\
 \hline
-0 & 1 & & & & \\
-& & 1 & & & \\
-1 & 2 & & -2 & & \\
-& & -1 & & 2/3 & \\
-1 & 2 & & 0 & & -5/36 \\
-& & -1 & & 1/4 & \\
-3 & 0 & & 1/2 & & \\
-& & 0 & & & \\
-3 & 0 & & & & \\
+0 & 0 & 1 & & & & \\
+1 & 1 & 2 & 1 & & & \\
+2 & 1 & 2 & -1 & -2 & & \\
+3 & 3 & 0 & -1 & 0 & 2/3 & \\
+4 & 3 & 0 & 0 & 1/2 & 1/4 & -5/36 \\
 \end{array}
 \]
 The coefficients from the top diagonal are $1, 1, -2, 2/3, -5/36$. The Newton form of the polynomial is:
@@ -408,13 +361,9 @@ The coefficients from the top diagonal are $1, 1, -2, 2/3, -5/36$. The Newton fo
 \[
 H_4(x) = 1 + x - 2x(x-1) + \frac{2}{3}x(x-1)^2 - \frac{5}{36}x(x-1)^2(x-3)
 \]
-We estimate $f(2)$ by evaluating $H_4(2)$.
-% 我们通过计算 $H_4(2)$ 来估计 $f(2)$。
+
 \[
-f(2) \approx H_4(2) = 1 + 2 - 2(2)(1) + \frac{2}{3}(2)(1)^2 - \frac{5}{36}(2)(1)^2(2-3)
-\]
-\[
-H_4(2) = 3 - 4 + \frac{4}{3} - \frac{5}{36}(-2) = -1 + \frac{4}{3} + \frac{10}{36} = -1 + \frac{24}{18} + \frac{5}{18} = \frac{-18+24+5}{18} = \frac{11}{18}
+H_4(2) =  -1 + \frac{4}{3} + \frac{10}{36} = -1 + \frac{24}{18} + \frac{5}{18} = \frac{-18+24+5}{18} = \frac{11}{18}
 \]
 
 \subsection*{Maximum Possible Error}
@@ -444,6 +393,8 @@ Given that $|f^{(5)}(x)| \le M$ on $[0,3]$, we can bound the error.
 \]
 The maximum possible error for the estimate $f(2) \approx 11/18$ is $M/60$.
 % 对于估计值 $f(2) \approx 11/18$，其最大可能误差为 $M/60$。
+
+
 
 
 \section*{VII. Relation Between Finite and Divided Differences}
@@ -476,13 +427,9 @@ Applying the inductive hypothesis to both terms on the right-hand side yields:
 \[
 \Delta^{k+1}f(x) = k!h^k f[x_1, \dots, x_{k+1}] - k!h^k f[x_0, \dots, x_k] = k!h^k \left( f[x_1, \dots, x_{k+1}] - f[x_0, \dots, x_k] \right)
 \]
-Using the recursive property of divided differences, we have:
-% 利用均差的递归性质，我们有：
 \[
 f[x_0, \dots, x_{k+1}] = \frac{f[x_1, \dots, x_{k+1}] - f[x_0, \dots, x_k]}{x_{k+1}-x_0}
 \]
-Since $x_{k+1}-x_0 = (x+(k+1)h) - x = (k+1)h$, we can write:
-% 由于 $x_{k+1}-x_0 = (x+(k+1)h) - x = (k+1)h$，我们可以写出：
 \[
 \Delta^{k+1}f(x) = k!h^k \left( (x_{k+1}-x_0) f[x_0, \dots, x_{k+1}] \right) = k!h^k (k+1)h f[x_0, \dots, x_{k+1}]
 \]
@@ -506,8 +453,6 @@ We apply the proven forward difference formula to the function evaluated at the 
 \[
 \Delta^k f(z) = k!h^k f[z, z+h, \dots, z+kh]
 \]
-Substituting $z=x-kh$ into the nodes gives the set:
-% 将 $z=x-kh$ 代入节点集，得到：
 \[
 \{x-kh, (x-kh)+h, \dots, (x-kh)+kh\} = \{x-kh, x-(k-1)h, \dots, x\}
 \]
@@ -518,8 +463,6 @@ Therefore, we have:
 \[
 \nabla^k f(x) = \Delta^k f(x-kh) = k!h^k f[x_{-k}, x_{-k+1}, \dots, x_0]
 \]
-Since the divided difference is a symmetric function of its arguments, the order of the nodes is irrelevant.
-% 由于均差是其参数的对称函数，节点的顺序无关紧要。
 \[
 \nabla^k f(x) = k!h^k f[x_0, x_{-1}, \dots, x_{-k}]
 \]
@@ -539,13 +482,9 @@ By the definition of the partial derivative, we have:
 \[
 \frac{\partial}{\partial x_0} f[x_0, x_1, \dots, x_n] = \lim_{h \to 0} \frac{f[x_0+h, x_1, \dots, x_n] - f[x_0, x_1, \dots, x_n]}{h}
 \]
-Due to the symmetry property of divided differences, we can reorder the arguments of the first term in the numerator.
-% 利用均差的对称性，我们可以重排分子中第一项的参数顺序。
 \[
 f[x_0+h, x_1, \dots, x_n] = f[x_1, \dots, x_n, x_0+h]
 \]
-The expression inside the limit can then be rewritten as:
-% 极限内的表达式因此可以被重写为：
 \[
 \frac{f[x_1, \dots, x_n, x_0+h] - f[x_0, x_1, \dots, x_n]}{(x_0+h) - x_0}
 \]
@@ -554,29 +493,22 @@ This is precisely the recursive definition for a higher-order divided difference
 \[
 \frac{\partial}{\partial x_0} f[x_0, \dots, x_n] = \lim_{h \to 0} f[x_0, x_1, \dots, x_n, x_0+h]
 \]
-Since $f$ is differentiable, the divided difference is a continuous function of its arguments. We can thus evaluate the limit by substitution.
-% 由于 $f$ 是可微的，均差是其参数的连续函数。因此我们可以通过代入来求解极限。
 \[
 \lim_{h \to 0} f[x_0, x_1, \dots, x_n, x_0+h] = f[x_0, x_1, \dots, x_n, x_0]
 \]
-Using the symmetry property one last time to group the repeated nodes gives the final result.
-% 最后一次使用对称性将重复的节点放在一起，得到最终结果。
 \[
 \frac{\partial}{\partial x_0} f[x_0, \dots, x_n] = f[x_0, x_0, x_1, \dots, x_n]
 \]
 
-\subsection*{Generalization for other variables}
+\subsection*{For other variables}
 % 对其他变量的推广
 
 The divided difference $f[x_0, \dots, x_n]$ is a symmetric function of its arguments. This allows the result to be generalized to the partial derivative with respect to any other variable $x_i$.
 % 均差 $f[x_0, \dots, x_n]$ 是其参数的对称函数。这使得结果可以推广到关于任何其他变量 $x_i$ 的偏导数。
-We can permute the arguments to place $x_i$ in the first position without changing the function's value.
-% 我们可以排列参数将 $x_i$ 置于首位，而函数值保持不变。
 \[
 f[x_0, \dots, x_i, \dots, x_n] = f[x_i, x_0, \dots, x_{i-1}, x_{i+1}, \dots, x_n]
 \]
-Let $Z$ be the set of all other variables $\{x_0, \dots, x_{i-1}, x_{i+1}, \dots, x_n\}$. Differentiating $f[x_i, Z]$ with respect to $x_i$ is directly analogous to the case for $x_0$.
-% 令 $Z$ 为所有其他变量的集合 $\{x_0, \dots, x_{i-1}, x_{i+1}, \dots, x_n\}$。对 $f[x_i, Z]$ 关于 $x_i$ 求导与对 $x_0$ 的情况完全类似。
+Let $Z$ be the set of all other variables $\{x_0, \dots, x_{i-1}, x_{i+1}, \dots, x_n\}$.
 \[
 \frac{\partial}{\partial x_i} f[x_i, Z] = f[x_i, x_i, Z]
 \]
@@ -623,8 +555,7 @@ A fundamental theorem of approximation theory states that the minimum value of t
 \[
 \min_{q \in \mathcal{P}_n^M} \max_{t \in [-1,1]} |q(t)| = \max_{t \in [-1,1]} |\tilde{T}_n(t)| = \frac{1}{2^{n-1}}
 \]
-Substituting this result back, we obtain the final solution.
-% 将此结果代回，我们得到最终解。
+
 \[
 \min_{a_1, \dots, a_n} \max_{x \in [a,b]} |P_n(x)| = |a_0| \left(\frac{b-a}{2}\right)^n \frac{1}{2^{n-1}} = |a_0| \frac{(b-a)^n}{2^{2n-1}}
 \]
@@ -633,7 +564,7 @@ Substituting this result back, we obtain the final solution.
 \section*{X. A Minimization Property of Scaled Chebyshev Polynomials}
 % X. 缩放的切比雪夫多项式的一个最小化性质
 
-We proceed by contradiction. Assume there exists a polynomial $p(x) \in \mathbb{P}_n^a$ such that $\|p\|_{\infty} < \|\hat{p}_n\|_{\infty}$.
+We proofed by contradiction. Assume there exists a polynomial $p(x) \in \mathbb{P}_n^a$ such that $\|p\|_{\infty} < \|\hat{p}_n\|_{\infty}$.
 % 我们使用反证法。假设存在一个多项式 $p(x) \in \mathbb{P}_n^a$ 满足 $\|p\|_{\infty} < \|\hat{p}_n\|_{\infty}$。
 Define a new polynomial $Q(x) = \hat{p}_n(x) - p(x)$. Since $\hat{p}_n$ and $p$ are both polynomials of degree $n$, $Q(x)$ is a polynomial of degree at most $n$.
 % 定义一个新多项式 $Q(x) = \hat{p}_n(x) - p(x)$。由于 $\hat{p}_n$ 和 $p$ 都是 $n$ 次多项式，因此 $Q(x)$ 是一个次数至多为 $n$ 的多项式。
@@ -643,9 +574,10 @@ The Chebyshev polynomial $T_n(x)$ attains its extrema on $[-1,1]$ at the $n+1$ p
 The polynomial $\hat{p}_n(x) = T_n(x)/T_n(a)$ therefore satisfies:
 % 因此，多项式 $\hat{p}_n(x) = T_n(x)/T_n(a)$ 满足：
 \[
-\hat{p}_n(x_k) = \frac{(-1)^k}{T_n(a)}
+\hat{p}_n(x_k) = \frac{(-1)^k}{T_n(a)},\quad \forall k=0,1,...,n,x_l=cos(\frac{k}{n}\pi).
 \]
 Since $a > 1$, $T_n(a) > 0$. The maximum absolute value of $\hat{p}_n(x)$ on $[-1,1]$ is thus $\|\hat{p}_n\|_{\infty} = 1/T_n(a)$.
+
 % 由于 $a > 1$, $T_n(a) > 0$。因此 $\hat{p}_n(x)$ 在 $[-1,1]$ 上的最大绝对值为 $\|\hat{p}_n\|_{\infty} = 1/T_n(a)$。
 
 At these points $x_k$, we evaluate $Q(x_k)$:
@@ -689,13 +621,10 @@ The proof begins by expanding the right-hand side (RHS) of the identity using th
 \[
 \text{RHS} = \frac{n-k}{n}b_{n,k}(t) + \frac{k+1}{n}b_{n,k+1}(t)
 \]
-Substituting the definition yields:
-% 代入定义可得：
 \[
 \text{RHS} = \frac{n-k}{n}\binom{n}{k}t^k(1-t)^{n-k} + \frac{k+1}{n}\binom{n}{k+1}t^{k+1}(1-t)^{n-k-1}
 \]
-Next, we expand the binomial coefficients and simplify the constant factors.
-% 接下来，我们展开二项式系数并简化常数因子。
+
 For the first term's coefficient:
 % 对于第一项的系数：
 \[
@@ -706,20 +635,16 @@ For the second term's coefficient:
 \[
 \frac{k+1}{n}\binom{n}{k+1} = \frac{k+1}{n} \frac{n!}{(k+1)!(n-k-1)!} = \frac{k+1}{n} \frac{n(n-1)!}{(k+1)k!(n-k-1)!} = \frac{(n-1)!}{k!(n-k-1)!} = \binom{n-1}{k}
 \]
-Substituting these simplified coefficients back into the expression for the RHS:
-% 将这些简化后的系数代回 RHS 的表达式中：
+
 \[
 \text{RHS} = \binom{n-1}{k}t^k(1-t)^{n-k} + \binom{n-1}{k}t^{k+1}(1-t)^{n-k-1}
 \]
-We can factor out the common terms $\binom{n-1}{k}t^k(1-t)^{n-k-1}$.
-% 我们可以提出公因式 $\binom{n-1}{k}t^k(1-t)^{n-k-1}$。
 \[
 \text{RHS} = \binom{n-1}{k}t^k(1-t)^{n-k-1} \left[ (1-t) + t \right]
 \]
-This simplifies to:
-% 化简后得到：
+
 \[
-\text{RHS} = \binom{n-1}{k}t^k(1-t)^{(n-1)-k} = b_{n-1,k}(t)
+\text{RHS} = \binom{n-1}{k}t^k(1-t)^{(n-1)-k} = b_{n-1,k}(t) =\text{LHS}
 \]
 The final expression is the definition of $b_{n-1,k}(t)$, which is the left-hand side (LHS) of the identity. This completes the proof.
 % 最终的表达式即为 $b_{n-1,k}(t)$ 的定义，也就是恒等式的左侧（LHS）。证明完毕。
@@ -743,13 +668,11 @@ The boundary term evaluates to zero for $k < n$. Thus, the expression simplifies
 \[
 I_{n,k} = \frac{n-k}{k+1} \binom{n}{k} \int_0^1 t^{k+1} (1-t)^{n-(k+1)} dt
 \]
-We analyze the coefficient:
-% 我们分析其系数：
+
 \[
 \frac{n-k}{k+1} \binom{n}{k} = \frac{n-k}{k+1} \frac{n!}{k!(n-k)!} = \frac{n!}{(k+1)!(n-k-1)!} = \binom{n}{k+1}
 \]
-Substituting this back, we establish a recurrence relation for the integral.
-% 将此代回，我们便为该积分建立了一个递推关系。
+
 \[
 I_{n,k} = \binom{n}{k+1} \int_0^1 t^{k+1} (1-t)^{n-(k+1)} dt = I_{n,k+1}
 \]
@@ -822,8 +745,8 @@ This leads to the final result, which is independent of $k$.
 % ===============================================
 \section*{ \center{\normalsize {Acknowledgement}} }
 Honestly, the \textbf{translation} was done using LLM tools, but the answers and solutions were written by myself.
-This version is edited out on 9th Oct.
-%20250919
+This version is edited out on 19th Oct.
+%2025
 
 
 %\printbibliography
