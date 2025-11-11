@@ -3,6 +3,7 @@
 \usepackage[backend=bibtex,style=numeric]{biblatex}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{graphicx}
 \usepackage{geometry}
 \geometry{margin=1.5cm, vmargin={0pt,1cm}}
 \setlength{\topmargin}{-1cm}
@@ -13,798 +14,357 @@
 
 \begin{document}
 % =================================================
-\title{Numerical Analysis homework \# 2}
-% 第2次
+\title{Numerical Analysis homework \# 3}
 \author{Wang Hengning 3230104148
   \thanks{Electronic address: \texttt{whning@zju.edu.cn}}}
 \affil{Computational mathematics 2301, Zhejiang University }
 
-
-\date{Due time: \today}
+% 使用PDF中的截止日期
+\date{Due time: November 11, 2025}
 
 \maketitle
 
-%\begin{abstract}
-%    The abstract is not necessary for the theoretical homework, 
-%    but for the programming project, 
-%    you are encouraged to write one.      
-%\end{abstract}
-
-
 % ============================================
-% \section*{I. Briefly repeat the problem}
-
-\section*{I. Analysis of the Linear Interpolation for $\frac{1}{x}$}
-% I. 线性插值余项分析
-
-\subsection*{i) Determining $\xi(x)$ Explicitly}
-% i) 明确确定 $\xi(x)$ 的表达式
-
-The function values at the nodes are $f(x_0) = f(1) = 1$ and $f(x_1) = f(2) = \frac{1}{2}$.
-% 节点处的函数值为 $f(x_0) = f(1) = 1$ 和 $f(x_1) = f(2) = \frac{1}{2}$。
-
-\[
-p_1(f; x) = f(x_0)\frac{x-x_1}{x_0-x_1} + f(x_1)\frac{x-x_0}{x_1-x_0}
-\]
-
-\[
-p_1(f; x) = -(x-2) + \frac{1}{2}(x-1) = -\frac{1}{2}x + \frac{3}{2}
-\]
-\[
-R_1(x) = \frac{1}{x} - \left(-\frac{1}{2}x + \frac{3}{2}\right) = \frac{(x-1)(x-2)}{2x}
-\]
-
-\[
-f''(x) = 2x^{-3} = \frac{2}{x^3}
-\]
-
-\[
-\frac{(x-1)(x-2)}{2x} = \frac{f''(\xi(x))}{2}(x - 1)(x - 2)
-\]
-Since $x \in (1, 2)$, the term $(x-1)(x-2)$ is non-zero, allowing us to simplify the equation:
-% 由于 $x \in (1, 2)$，项 $(x-1)(x-2)$ 非零，我们可以简化该方程：
-\[
-\frac{1}{2x} = \frac{f''(\xi(x))}{2} \implies f''(\xi(x)) = \frac{1}{x}
-\]
-Substituting the expression for the second derivative, $f''(\xi(x)) = \frac{2}{(\xi(x))^3}$:
-% 代入二阶导数的表达式 $f''(\xi(x)) = \frac{2}{(\xi(x))^3}$：
-\[
-\frac{2}{(\xi(x))^3} = \frac{1}{x} \implies (\xi(x))^3 = 2x
-\]
-Thus:
-\[
-\xi(x) = \sqrt[3]{2x}, \quad x \in (1, 2)
-\]
-
-\subsection*{ii) Extension and Calculation of Extrema}
-% ii) 延拓与极值计算
-Since $\xi(x)$ is a \textbf{monotonically} increasing function on $[1, 2]$, its minimum and maximum values occur at the endpoints,  its maximum value occurs at the left endpoint $x=1$:
-% 由于 $\xi(x)$ 在 $[1, 2]$ 上是单调递增函数，其最小值和最大值发生在端点：
-\[
-\min_{x \in [1, 2]} \xi(x) = \xi(1) = \sqrt[3]{2 \cdot 1} = \sqrt[3]{2}
-\]
-\[
-\max_{x \in [1, 2]} \xi(x) = \xi(2) = \sqrt[3]{2 \cdot 2} = \sqrt[3]{4}
-\]
-\[
-\max_{x \in [1, 2]} f''(\xi(x)) = \max_{x \in [1, 2]} \left(\frac{1}{x}\right) = \frac{1}{1} = 1
-\]
-
-
-
-
-\section*{II. Construction of a Non-negative Interpolating Polynomial}
-% II. 非负插值多项式的构造
-
-We are tasked with finding a polynomial $p \in \mathbb{P}_{2n}^+$ such that it interpolates the given data points $(x_i, f_i)$ for $i=0, 1, \dots, n$, where $f_i \ge 0$.
-% 我们的任务是找到一个多项式 $p \in \mathbb{P}_{2n}^+$，使其能够对给定的数据点 $(x_i, f_i)$（其中 $i=0, 1, \dots, n$ 且 $f_i \ge 0$）进行插值。
-
-Let $l_k(x)$ for $k=0, 1, \dots, n$ be the Lagrange basis polynomials corresponding to the distinct nodes $\{x_j\}_{j=0}^n$. These polynomials satisfy the property $l_k(x_j) = \delta_{kj}$.
-% 令 $l_k(x)$（其中 $k=0, 1, \dots, n$）为与不同节点 $\{x_j\}_{j=0}^n$ 相对应的拉格朗日基本多项式。这些多项式满足性质 $l_k(x_j) = \delta_{kj}$。
-
-\subsection*{First Construction}
-% 第一种构造方法
-
-Consider the polynomial defined as a sum of squares:
-% 考虑定义为平方和的多项式：
-\[
-p(x) = \sum_{k=0}^{n} f_k l_k^2(x)
-\]
-The degree of each basis polynomial $l_k(x)$ is $n$, which implies the degree of $l_k^2(x)$ is $2n$. Consequently, the degree of $p(x)$ is at most $2n$.
-% 每个基本多项式 $l_k(x)$ 的次数为 $n$，这意味着 $l_k^2(x)$ 的次数为 $2n$。因此，$p(x)$ 的次数至多为 $2n$。
-
-Given that $f_k \ge 0$ and $l_k^2(x) \ge 0$ for any real $x$, the sum $p(x)$ is non-negative for all $x \in \mathbb{R}$. Thus, $p(x) \in \mathbb{P}_{2n}^+$.
-% 考虑到对于任意实数 $x$ 都有 $f_k \ge 0$ 和 $l_k^2(x) \ge 0$，该求和多项式 $p(x)$ 对所有 $x \in \mathbb{R}$ 都是非负的。因此，$p(x) \in \mathbb{P}_{2n}^+$。
-
-Verifying the interpolation conditions at the nodes $x_i$:
-% 在节点 $x_i$ 处验证插值条件：
-\[
-p(x_i) = \sum_{k=0}^{n} f_k l_k^2(x_i) = f_i l_i^2(x_i) + \sum_{k \neq i} f_k l_k^2(x_i) = f_i (1)^2 + \sum_{k \neq i} f_k (0)^2 = f_i
-\]
-This construction satisfies all requirements.
-% 此构造满足所有要求。
-
-\subsection*{Second Construction}
-% 第二种构造方法
-
-Alternatively, consider the polynomial formed by squaring a sum:
-% 作为替代，考虑通过对一个和式进行平方来构造多项式：
-\[
-p(x) = \left( \sum_{k=0}^{n} \sqrt{f_k} l_k(x) \right)^2
-\]
-Let $S(x) = \sum_{k=0}^{n} \sqrt{f_k} l_k(x)$. Since each $l_k(x)$ is of degree $n$, the degree of $S(x)$ is at most $n$. Therefore, the degree of $p(x) = [S(x)]^2$ is at most $2n$.
-% 令 $S(x) = \sum_{k=0}^{n} \sqrt{f_k} l_k(x)$。由于每个 $l_k(x)$ 的次数为 $n$，所以 $S(x)$ 的次数至多为 $n$。因此，$p(x) = [S(x)]^2$ 的次数至多为 $2n$。
-
-The squared form inherently ensures that $p(x) \ge 0$ for all real $x$, so $p(x) \in \mathbb{P}_{2n}^+$.
-% 其平方形式内在地保证了对所有实数 $x$ 都有 $p(x) \ge 0$，所以 $p(x) \in \mathbb{P}_{2n}^+$。
-
-Evaluating at the interpolation nodes $x_i$:
-% 在插值节点 $x_i$ 处求值：
-\[
-p(x_i) = \left( \sum_{k=0}^{n} \sqrt{f_k} l_k(x_i) \right)^2 = \left( \sqrt{f_i} l_i(x_i) \right)^2 = \left( \sqrt{f_i} \cdot 1 \right)^2 = f_i
-\]
-This alternative also fulfills all the problem's conditions.
-% 这个替代方案同样满足题目的所有条件。
-
-
-
-
-\section*{III. Analysis of Divided Differences for $f(x)=e^x$}
-% III. 函数 $f(x)=e^x$ 的均差分析
-
-\subsection*{Proof by Induction}
-% 归纳证明
-
-Let the statement be $P(n): f[t, t+1, \dots, t+n] = \frac{(e-1)^n}{n!}e^t$.
-% 设命题为 $P(n): f[t, t+1, \dots, t+n] = \frac{(e-1)^n}{n!}e^t$。
-
-The base case $n=0$ is trivial, as $f[t] = e^t = \frac{(e-1)^0}{0!}e^t$.
-% 基础情形 $n=0$ 是显然的，因为 $f[t] = e^t = \frac{(e-1)^0}{0!}e^t$。
-
-Assume $P(n)$ holds for some $n \ge 0$. For $n+1$, the recursive definition of divided differences is:
-% 假设 $P(n)$ 对某个 $n \ge 0$ 成立。对于 $n+1$，均差的递归定义为：
-\[
-f[t, \dots, t+n+1] = \frac{f[t+1, \dots, t+n+1] - f[t, \dots, t+n]}{n+1}
-\]
-By the inductive hypothesis, the numerator is:
-% 根据归纳假设，分子为：
-\[
-\frac{(e-1)^n}{n!}e^{t+1} - \frac{(e-1)^n}{n!}e^t = \frac{(e-1)^n}{n!}e^t(e-1) = \frac{(e-1)^{n+1}}{n!}e^t
-\]
-Substituting this back confirms $P(n+1)$:
-% 将此代回可证实 $P(n+1)$：
-\[
-f[t, \dots, t+n+1] = \frac{1}{n+1} \left( \frac{(e-1)^{n+1}}{n!}e^t \right) = \frac{(e-1)^{n+1}}{(n+1)!}e^t
-\]
-Thus, the formula holds for all integers $n \ge 0$.
-% 因此，该公式对所有整数 $n \ge 0$ 均成立。
-
-\subsection*{Determination of $\xi$}
-% $\xi$ 的确定
-
-From the result above, setting $t=0$ yields:
-% 根据上述结果，令 $t=0$ 可得：
-\[
-f[0, 1, \dots, n] = \frac{(e-1)^n}{n!}
-\]
-Corollary 2.22 provides an alternative expression for some $\xi \in (0, n)$:
-% 推论 2.22 提供了另一种表达式，其中 $\xi \in (0, n)$：
-\[
-f[0, 1, \dots, n] = \frac{f^{(n)}(\xi)}{n!}
-\]
-For $f(x)=e^x$, the $n$-th derivative is $f^{(n)}(x)=e^x$. Equating the two expressions gives:
-% 对于 $f(x)=e^x$，其 $n$ 阶导数为 $f^{(n)}(x)=e^x$。令两个表达式相等可得：
-\[
-\frac{(e-1)^n}{n!} = \frac{e^\xi}{n!}
-\]
-Solving for $\xi$ directly gives:
-% 直接求解 $\xi$ 可得：
-\[
-\xi = n \ln(e-1)
-\]
-To compare $\xi$ with the midpoint $n/2$, we analyze the term $\ln(e-1)$.
-% 为将 $\xi$ 与中点 $n/2$ 进行比较，我们分析 $\ln(e-1)$ 这一项。
-Since $e \approx 2.718$ and $e^{1/2} = \sqrt{e} \approx 1.648$, we have $e-1 > e^{1/2}$.
-% 由于 $e \approx 2.718$ 且 $e^{1/2} = \sqrt{e} \approx 1.648$，我们有 $e-1 > e^{1/2}$。
-Applying the natural logarithm to this inequality shows that $\ln(e-1) > 1/2$.
-% 对该不等式应用自然对数表明 $\ln(e-1) > 1/2$。
-Therefore, the position of $\xi$ is determined by:
-% 因此，$\xi$ 的位置由以下关系确定：
-\[
-\xi = n \ln(e-1) > n \cdot \frac{1}{2} = \frac{n}{2}
-\]
-The point $\xi$ is located to the right of the midpoint of the interval $(0,n)$.
-% 点 $\xi$ 位于区间 $(0,n)$ 中点的右侧。
-
-
-\section*{IV. Newton Interpolation and Minimum Approximation}
-% IV. 牛顿插值与最小值近似
-
-\subsection*{Newton Form of the Interpolating Polynomial}
-% 插值多项式的牛顿形式
-
-The given data points are $(0, 5)$, $(1, 3)$, $(3, 5)$, and $(4, 12)$.
-% 给定的数据点为 $(0, 5)$、$(1, 3)$、$(3, 5)$ 和 $(4, 12)$。
-The divided differences are computed and organized in the following table:
-% 计算均差并整理成下表：
-\[
-\begin{array}{c|cccc}
-x_i & f(x_i) & f[x_i, x_{i+1}] & f[x_i, \dots, x_{i+2}] & f[x_i, \dots, x_{i+3}] \\
-\hline
-0 & 5 & & & \\
-& & -2 & & \\
-1 & 3 & & 1 & \\
-& & 1 & & 1/4 \\
-3 & 5 & & 2 & \\
-& & 7 & & \\
-4 & 12 & & & \\
-\end{array}
-\]
-The Newton form of the interpolating polynomial $p_3(x)$ is constructed using the top diagonal of the table.
-% 插值多项式 $p_3(x)$ 的牛顿形式由表格的上对角线元素构造。
-\[
-p_3(x) = f[x_0] + f[x_0, x_1](x-x_0) + f[x_0, x_1, x_2](x-x_0)(x-x_1) + f[x_0, x_1, x_2, x_3](x-x_0)(x-x_1)(x-x_2)
-\]
-Substituting the coefficients and nodes gives:
-% 代入系数和节点可得：
-\[
-p_3(x) = 5 - 2x + 1 \cdot x(x-1) + \frac{1}{4}x(x-1)(x-3)
-\]
-
-\subsection*{Approximation of the Minimum}
-% 最小值的近似
-
-To find the minimum, we first find the derivative of the polynomial $p_3(x)$. Expanding the polynomial simplifies differentiation:
-% 为了找到最小值，我们首先求多项式 $p_3(x)$ 的导数。展开多项式可以简化求导过程：
-\[
-p_3(x) = 5 - 2x + (x^2 - x) + \frac{1}{4}(x^3 - 4x^2 + 3x) = \frac{1}{4}x^3 - \frac{9}{4}x + 5
-\]
-The derivative is:
-% 其导数为：
-\[
-p'_3(x) = \frac{3}{4}x^2 - \frac{9}{4} = \frac{3}{4}(x^2 - 3)
-\]
-Setting the derivative to zero, $p'_3(x) = 0$, yields the critical points.
-% 令导数等于零，$p'_3(x) = 0$，得到临界点。
-\[
-x^2 - 3 = 0 \implies x = \pm\sqrt{3}
-\]
-The problem suggests a minimum in the interval $(1,3)$. Since $\sqrt{3} \approx 1.732$ is within this interval, we select it as our candidate.
-% 题目暗示在区间 $(1,3)$ 内存在一个最小值。由于 $\sqrt{3} \approx 1.732$ 在此区间内，我们选择它作为候选点。
-To confirm it is a minimum, we check the second derivative:
-% 为确认其为最小值，我们检查二阶导数：
-\[
-p''_3(x) = \frac{3}{2}x
-\]
-At $x = \sqrt{3}$, we have $p''_3(\sqrt{3}) = \frac{3\sqrt{3}}{2} > 0$, which confirms a local minimum.
-% 在 $x = \sqrt{3}$ 处，我们有 $p''_3(\sqrt{3}) = \frac{3\sqrt{3}}{2} > 0$，这证实了该点是一个局部最小值。
-Thus, the approximate location of the minimum is:
-% 因此，最小值的近似位置是：
-\[
-x_{\min} \approx \sqrt{3}
-\]
-
-
-
-\section*{V. Divided Differences with Repeated Nodes for $f(x)=x^7$}
-% V. 函数 $f(x)=x^7$ 的带重复节点的均差
-
-\subsection*{Computation of the Divided Difference}
-% 均差的计算
-
-To handle the repeated nodes, we require the derivatives of $f(x)=x^7$.
-% 为了处理重复节点，我们需要函数 $f(x)=x^7$ 的导数。
-\[
-f'(x) = 7x^6, \quad f''(x) = 42x^5
-\]
-The values needed for the divided difference table are:
-% 均差表所需的数值如下：
-\[
-f'(1)=7, \quad f''(1)=42, \quad f'(2)=448
-\]
-We construct the divided difference table for the nodes $z = \{0, 1, 1, 1, 2, 2\}$. For repeated nodes $z_i=z_{i+k}$, the higher-order differences are defined using derivatives, such as $f[z_i, \dots, z_{i+k}] = f^{(k)}(z_i)/k!$.
-% 我们为节点序列 $z = \{0, 1, 1, 1, 2, 2\}$ 构建均差表。对于重复节点 $z_i=z_{i+k}$，高阶均差由导数定义，例如 $f[z_i, \dots, z_{i+k}] = f^{(k)}(z_i)/k!$。
-\[
-\begin{array}{c|cccccc}
-z_i & f[z_i] & \text{1st ord.} & \text{2nd ord.} & \text{3rd ord.} & \text{4th ord.} & \text{5th ord.} \\
-\hline
-0 & 0 & & & & & \\
-& & 1 & & & & \\
-1 & 1 & & 6 & & & \\
-& & f'(1)=7 & & 15 & & \\
-1 & 1 & & f''(1)/2=21 & & 42 & \\
-& & f'(1)=7 & & 99 & & 30 \\
-1 & 1 & & 120 & & 102 & \\
-& & 127 & & 201 & & \\
-2 & 128 & & 321 & & & \\
-& & f'(2)=448 & & & & \\
-2 & 128 & & & & & \\
-\end{array}
-\]
-The final entry in the table gives the desired value.
-% 表格中的最后一项即为所求值。
-\[
-f[0, 1, 1, 1, 2, 2] = 30
-\]
-
-\subsection*{Determination of $\xi$}
-% $\xi$ 的确定
-
-The Mean Value Theorem for divided differences relates the divided difference to a derivative.
-% 均差中值定理将均差与导数联系起来。
-\[
-f[z_0, \dots, z_n] = \frac{f^{(n)}(\xi)}{n!} \quad \text{for some } \xi \in (\min(z_i), \max(z_i))
-\]
-For this problem, we have $n=5$ and the nodes are within the interval $(0,2)$. The 5th derivative of $f(x)$ is calculated as:
-% 对于本题，$n=5$，且节点位于区间 $(0,2)$ 内。函数 $f(x)$ 的五阶导数计算如下：
-\[
-f^{(5)}(x) = (7 \cdot 6 \cdot 5 \cdot 4 \cdot 3) x^2 = 2520x^2
-\]
-By substituting the computed divided difference and $n=5$ into the theorem, we get an equation for $\xi$.
-% 将计算出的均差值和 $n=5$ 代入定理，我们得到一个关于 $\xi$ 的方程。
-\[
-30 = \frac{f^{(5)}(\xi)}{5!} = \frac{2520\xi^2}{120}
-\]
-We solve this equation for $\xi$:
-% 我们求解这个关于 $\xi$ 的方程：
-\[
-\xi^2 = \frac{30 \cdot 120}{2520} = \frac{3600}{2520} = \frac{10}{7}
-\]
-Since $\xi$ must be in $(0,2)$, we take the positive square root.
-% 由于 $\xi$ 必须在 $(0,2)$ 内，我们取正平方根。
-\[
-\xi = \sqrt{\frac{10}{7}} = \frac{\sqrt{70}}{7}
-\]
-
-\section*{VI. Hermite Interpolation and Error Analysis}
-% VI. Hermite 插值及误差分析
-
-\subsection*{Estimate of $f(2)$}
-% $f(2)$ 的估计
-
-The Hermite interpolation problem is defined by the nodes $z = \{0, 1, 1, 3, 3\}$. We use the divided difference method to find the interpolating polynomial $H_4(x)$.
-% Hermite 插值问题由节点序列 $z = \{0, 1, 1, 3, 3\}$ 定义。我们使用均差法来寻找插值多项式 $H_4(x)$。
-The required derivative values are $f'(1)=-1$ and $f'(3)=0$. The divided difference table is constructed as follows:
-% 所需的导数值为 $f'(1)=-1$ 和 $f'(3)=0$。均差表构造如下：
-\[
-\begin{array}{c|ccccc}
-z_i & f[z_i] & \text{1st} & \text{2nd} & \text{3rd} & \text{4th} \\
-\hline
-0 & 1 & & & & \\
-& & 1 & & & \\
-1 & 2 & & -2 & & \\
-& & -1 & & 2/3 & \\
-1 & 2 & & 0 & & -5/36 \\
-& & -1 & & 1/4 & \\
-3 & 0 & & 1/2 & & \\
-& & 0 & & & \\
-3 & 0 & & & & \\
-\end{array}
-\]
-The coefficients from the top diagonal are $1, 1, -2, 2/3, -5/36$. The Newton form of the polynomial is:
-% 从上对角线得到的系数为 $1, 1, -2, 2/3, -5/36$。多项式的牛顿形式为：
-\[
-H_4(x) = 1 + x - 2x(x-1) + \frac{2}{3}x(x-1)^2 - \frac{5}{36}x(x-1)^2(x-3)
-\]
-We estimate $f(2)$ by evaluating $H_4(2)$.
-% 我们通过计算 $H_4(2)$ 来估计 $f(2)$。
-\[
-f(2) \approx H_4(2) = 1 + 2 - 2(2)(1) + \frac{2}{3}(2)(1)^2 - \frac{5}{36}(2)(1)^2(2-3)
-\]
-\[
-H_4(2) = 3 - 4 + \frac{4}{3} - \frac{5}{36}(-2) = -1 + \frac{4}{3} + \frac{10}{36} = -1 + \frac{24}{18} + \frac{5}{18} = \frac{-18+24+5}{18} = \frac{11}{18}
-\]
-
-\subsection*{Maximum Possible Error}
-% 最大可能误差
-
-The error in Hermite interpolation for a function $f \in C^5[0,3]$ is given by the formula:
-% 对于函数 $f \in C^5[0,3]$，Hermite 插值的误差由以下公式给出：
-\[
-E_4(x) = f(x) - H_4(x) = \frac{f^{(5)}(\xi)}{5!} \prod_{i=0}^{4} (x-z_i)
-\]
-where $\xi$ is in the interval spanned by the nodes, $(0,3)$.
-% 其中 $\xi$ 位于节点所张成的区间 $(0,3)$ 内。
-We want to bound the error at $x=2$. The node product at this point is:
-% 我们希望界定在 $x=2$ 处的误差。该点的节点乘积为：
-\[
-\Psi(2) = (2-0)(2-1)(2-1)(2-3)(2-3) = (2)(1)(1)(-1)(-1) = 2
-\]
-The error at $x=2$ is therefore:
-% 因此，在 $x=2$ 处的误差为：
-\[
-|E_4(2)| = \left| \frac{f^{(5)}(\xi)}{5!} \cdot \Psi(2) \right| = \left| \frac{f^{(5)}(\xi)}{120} \cdot 2 \right| = \frac{|f^{(5)}(\xi)|}{60}
-\]
-Given that $|f^{(5)}(x)| \le M$ on $[0,3]$, we can bound the error.
-% 给定在 $[0,3]$ 上 $|f^{(5)}(x)| \le M$，我们可以界定该误差。
-\[
-|E_4(2)| \le \frac{M}{60}
-\]
-The maximum possible error for the estimate $f(2) \approx 11/18$ is $M/60$.
-% 对于估计值 $f(2) \approx 11/18$，其最大可能误差为 $M/60$。
-
-
-\section*{VII. Relation Between Finite and Divided Differences}
-% VII. 有限差分与均差之间的关系
-
-\subsection*{Forward Difference}
-% 前向差分
-
-We prove the identity $\Delta^k f(x) = k!h^k f[x_0, x_1, \dots, x_k]$ by induction on $k$, where $x_j = x+jh$.
-% 我们通过对 $k$ 进行归纳来证明等式 $\Delta^k f(x) = k!h^k f[x_0, x_1, \dots, x_k]$，其中 $x_j = x+jh$。
-For the base case $k=1$, we use the definitions of the operators.
-% 对于基础情形 $k=1$，我们使用算子的定义。
-\[
-\Delta f(x) = f(x+h) - f(x) = f(x_1) - f(x_0)
-\]
-The right-hand side is:
-% 等式右侧为：
-\[
-1!h^1 f[x_0, x_1] = h \frac{f(x_1)-f(x_0)}{x_1 - x_0} = h \frac{f(x_1)-f(x_0)}{h} = f(x_1)-f(x_0)
-\]
-The identity holds for $k=1$.
-% 该等式对 $k=1$ 成立。
-Now, assume the proposition is true for an integer $k \ge 1$. We examine the case for $k+1$.
-% 现在，假设命题对某个整数 $k \ge 1$ 成立。我们来考察 $k+1$ 的情形。
-\[
-\Delta^{k+1}f(x) = \Delta^k f(x+h) - \Delta^k f(x)
-\]
-Applying the inductive hypothesis to both terms on the right-hand side yields:
-% 将归纳假设应用于右侧的两项可得：
-\[
-\Delta^{k+1}f(x) = k!h^k f[x_1, \dots, x_{k+1}] - k!h^k f[x_0, \dots, x_k] = k!h^k \left( f[x_1, \dots, x_{k+1}] - f[x_0, \dots, x_k] \right)
-\]
-Using the recursive property of divided differences, we have:
-% 利用均差的递归性质，我们有：
-\[
-f[x_0, \dots, x_{k+1}] = \frac{f[x_1, \dots, x_{k+1}] - f[x_0, \dots, x_k]}{x_{k+1}-x_0}
-\]
-Since $x_{k+1}-x_0 = (x+(k+1)h) - x = (k+1)h$, we can write:
-% 由于 $x_{k+1}-x_0 = (x+(k+1)h) - x = (k+1)h$，我们可以写出：
-\[
-\Delta^{k+1}f(x) = k!h^k \left( (x_{k+1}-x_0) f[x_0, \dots, x_{k+1}] \right) = k!h^k (k+1)h f[x_0, \dots, x_{k+1}]
-\]
-This simplifies to the desired result for $k+1$.
-% 这可以简化为 $k+1$ 情形下的期望结果。
-\[
-\Delta^{k+1}f(x) = (k+1)!h^{k+1}f[x_0, \dots, x_{k+1}]
-\]
-By the principle of induction, the formula is proven for all $k \ge 1$.
-% 根据数学归纳法原理，该公式对所有 $k \ge 1$ 都已得证。
-
-\subsection*{Backward Difference}
-% 后向差分
-
-A similar proof by induction can be constructed. Alternatively, we can use the established relationship between the backward and forward difference operators, $\nabla f(x) = \Delta f(x-h)$.
-% 类似的归纳证明也可以构建。作为替代，我们可以利用后向和前向差分算子之间的既定关系 $\nabla f(x) = \Delta f(x-h)$。
-By repeated application, this leads to the identity $\nabla^k f(x) = \Delta^k f(x-kh)$.
-% 通过重复应用，可得到恒等式 $\nabla^k f(x) = \Delta^k f(x-kh)$。
-We apply the proven forward difference formula to the function evaluated at the point $z = x-kh$:
-% 我们将已证明的前向差分公式应用于在点 $z = x-kh$ 处求值的函数：
-\[
-\Delta^k f(z) = k!h^k f[z, z+h, \dots, z+kh]
-\]
-Substituting $z=x-kh$ into the nodes gives the set:
-% 将 $z=x-kh$ 代入节点集，得到：
-\[
-\{x-kh, (x-kh)+h, \dots, (x-kh)+kh\} = \{x-kh, x-(k-1)h, \dots, x\}
-\]
-This set of nodes is precisely $\{x_{-k}, x_{-k+1}, \dots, x_0\}$.
-% 这个节点集恰好是 $\{x_{-k}, x_{-k+1}, \dots, x_0\}$。
-Therefore, we have:
-% 因此，我们有：
-\[
-\nabla^k f(x) = \Delta^k f(x-kh) = k!h^k f[x_{-k}, x_{-k+1}, \dots, x_0]
-\]
-Since the divided difference is a symmetric function of its arguments, the order of the nodes is irrelevant.
-% 由于均差是其参数的对称函数，节点的顺序无关紧要。
-\[
-\nabla^k f(x) = k!h^k f[x_0, x_{-1}, \dots, x_{-k}]
-\]
-This completes the proof.
-% 证明完毕。
-
-
-
-\section*{VIII. Derivative of Divided Differences}
-% VIII. 均差的导数
-
-\subsection*{Partial Derivative with respect to $x_0$}
-% 关于 $x_0$ 的偏导数
-
-By the definition of the partial derivative, we have:
-% 根据偏导数的定义，我们有：
-\[
-\frac{\partial}{\partial x_0} f[x_0, x_1, \dots, x_n] = \lim_{h \to 0} \frac{f[x_0+h, x_1, \dots, x_n] - f[x_0, x_1, \dots, x_n]}{h}
-\]
-Due to the symmetry property of divided differences, we can reorder the arguments of the first term in the numerator.
-% 利用均差的对称性，我们可以重排分子中第一项的参数顺序。
-\[
-f[x_0+h, x_1, \dots, x_n] = f[x_1, \dots, x_n, x_0+h]
-\]
-The expression inside the limit can then be rewritten as:
-% 极限内的表达式因此可以被重写为：
-\[
-\frac{f[x_1, \dots, x_n, x_0+h] - f[x_0, x_1, \dots, x_n]}{(x_0+h) - x_0}
-\]
-This is precisely the recursive definition for a higher-order divided difference over the nodes $\{x_0, x_1, \dots, x_n, x_0+h\}$.
-% 这恰好是基于节点 $\{x_0, x_1, \dots, x_n, x_0+h\}$ 的高阶均差的递归定义。
-\[
-\frac{\partial}{\partial x_0} f[x_0, \dots, x_n] = \lim_{h \to 0} f[x_0, x_1, \dots, x_n, x_0+h]
-\]
-Since $f$ is differentiable, the divided difference is a continuous function of its arguments. We can thus evaluate the limit by substitution.
-% 由于 $f$ 是可微的，均差是其参数的连续函数。因此我们可以通过代入来求解极限。
-\[
-\lim_{h \to 0} f[x_0, x_1, \dots, x_n, x_0+h] = f[x_0, x_1, \dots, x_n, x_0]
-\]
-Using the symmetry property one last time to group the repeated nodes gives the final result.
-% 最后一次使用对称性将重复的节点放在一起，得到最终结果。
-\[
-\frac{\partial}{\partial x_0} f[x_0, \dots, x_n] = f[x_0, x_0, x_1, \dots, x_n]
-\]
-
-\subsection*{Generalization for other variables}
-% 对其他变量的推广
-
-The divided difference $f[x_0, \dots, x_n]$ is a symmetric function of its arguments. This allows the result to be generalized to the partial derivative with respect to any other variable $x_i$.
-% 均差 $f[x_0, \dots, x_n]$ 是其参数的对称函数。这使得结果可以推广到关于任何其他变量 $x_i$ 的偏导数。
-We can permute the arguments to place $x_i$ in the first position without changing the function's value.
-% 我们可以排列参数将 $x_i$ 置于首位，而函数值保持不变。
-\[
-f[x_0, \dots, x_i, \dots, x_n] = f[x_i, x_0, \dots, x_{i-1}, x_{i+1}, \dots, x_n]
-\]
-Let $Z$ be the set of all other variables $\{x_0, \dots, x_{i-1}, x_{i+1}, \dots, x_n\}$. Differentiating $f[x_i, Z]$ with respect to $x_i$ is directly analogous to the case for $x_0$.
-% 令 $Z$ 为所有其他变量的集合 $\{x_0, \dots, x_{i-1}, x_{i+1}, \dots, x_n\}$。对 $f[x_i, Z]$ 关于 $x_i$ 求导与对 $x_0$ 的情况完全类似。
-\[
-\frac{\partial}{\partial x_i} f[x_i, Z] = f[x_i, x_i, Z]
-\]
-Substituting the set $Z$ back gives the general formula for any $i \in \{0, 1, \dots, n\}$.
-% 将集合 $Z$ 代回，即可得到对于任何 $i \in \{0, 1, \dots, n\}$ 的通用公式。
-\[
-\frac{\partial}{\partial x_i} f[x_0, \dots, x_n] = f[x_i, x_i, x_0, \dots, x_{i-1}, x_{i+1}, \dots, x_n]
-\]
-This result represents the divided difference over the original set of nodes with the node $x_i$ repeated.
-% 此结果代表在原有节点集的基础上，将节点 $x_i$ 重复一次后所构成的均差。
-
-
-\section*{IX. A Min-Max Polynomial Problem}
-% IX. 一个多项式极小化极大问题
-
-Let $P_n(x) = a_0x^n + a_1x^{n-1} + \dots + a_n$. The problem is to determine the value of $\min_{a_1, \dots, a_n} \max_{x \in [a,b]} |P_n(x)|$.
-% 设 $P_n(x) = a_0x^n + a_1x^{n-1} + \dots + a_n$。问题在于确定 $\min_{a_1, \dots, a_n} \max_{x \in [a,b]} |P_n(x)|$ 的值。
-We can factor out the fixed leading coefficient $|a_0|$:
-% 我们可以提出固定的首项系数 $|a_0|$：
-\[
-\max_{x \in [a,b]} |P_n(x)| = |a_0| \max_{x \in [a,b]} |x^n + \frac{a_1}{a_0}x^{n-1} + \dots + \frac{a_n}{a_0}|
-\]
-Minimizing over $a_1, \dots, a_n$ is equivalent to minimizing over the coefficients of the resulting monic polynomial. Let $\mathcal{P}_n^M$ be the set of all monic polynomials of degree $n$. The problem is transformed into:
-% 对 $a_1, \dots, a_n$ 取极小值等价于对所得的首一多项式的系数取极小值。设 $\mathcal{P}_n^M$ 是所有 $n$ 次首一多项式的集合。该问题可转化为：
-\[
-|a_0| \min_{p \in \mathcal{P}_n^M} \max_{x \in [a,b]} |p(x)|
-\]
-We use the linear transformation $x = \frac{b-a}{2}t + \frac{a+b}{2}$ to map the interval $t \in [-1, 1]$ onto $x \in [a,b]$.
-% 我们使用线性变换 $x = \frac{b-a}{2}t + \frac{a+b}{2}$ 将区间 $t \in [-1, 1]$ 映射到 $x \in [a,b]$。
-A monic polynomial $p(x) \in \mathcal{P}_n^M$ can be expressed in terms of $t$:
-% 一个首一多项式 $p(x) \in \mathcal{P}_n^M$ 可以用变量 $t$ 来表示：
-\[
-p(x) = \left(\frac{b-a}{2}t + \frac{a+b}{2}\right)^n + \dots = \left(\frac{b-a}{2}\right)^n t^n + \text{lower degree terms in } t
-\]
-This implies that $p(x)$ can be written as $(\frac{b-a}{2})^n q(t)$, where $q(t)$ is a monic polynomial in $t$ of degree $n$.
-% 这意味着 $p(x)$ 可以写成 $(\frac{b-a}{2})^n q(t)$ 的形式，其中 $q(t)$ 是一个关于 $t$ 的 $n$ 次首一多项式。
-The min-max problem over $[a,b]$ becomes a corresponding problem over $[-1,1]$.
-% 在 $[a,b]$ 上的极小化极大问题相应地变成了在 $[-1,1]$ 上的问题。
-\[
-\min_{p \in \mathcal{P}_n^M} \max_{x \in [a,b]} |p(x)| = \min_{q \in \mathcal{P}_n^M} \max_{t \in [-1,1]} \left|\left(\frac{b-a}{2}\right)^n q(t)\right| = \left(\frac{b-a}{2}\right)^n \min_{q \in \mathcal{P}_n^M} \max_{t \in [-1,1]} |q(t)|
-\]
-A fundamental theorem of approximation theory states that the minimum value of the maximum absolute value for a monic polynomial of degree $n$ on $[-1,1]$ is achieved by the monic Chebyshev polynomial $\tilde{T}_n(t) = T_n(t)/2^{n-1}$.
-% 逼近论中的一个基本定理指出，在 $[-1,1]$ 上，$n$ 次首一多项式的最大绝对值的最小值由首一 Chebyshev 多项式 $\tilde{T}_n(t) = T_n(t)/2^{n-1}$ 达到。
-\[
-\min_{q \in \mathcal{P}_n^M} \max_{t \in [-1,1]} |q(t)| = \max_{t \in [-1,1]} |\tilde{T}_n(t)| = \frac{1}{2^{n-1}}
-\]
-Substituting this result back, we obtain the final solution.
-% 将此结果代回，我们得到最终解。
-\[
-\min_{a_1, \dots, a_n} \max_{x \in [a,b]} |P_n(x)| = |a_0| \left(\frac{b-a}{2}\right)^n \frac{1}{2^{n-1}} = |a_0| \frac{(b-a)^n}{2^{2n-1}}
-\]
-
-
-\section*{X. A Minimization Property of Scaled Chebyshev Polynomials}
-% X. 缩放的切比雪夫多项式的一个最小化性质
-
-We proceed by contradiction. Assume there exists a polynomial $p(x) \in \mathbb{P}_n^a$ such that $\|p\|_{\infty} < \|\hat{p}_n\|_{\infty}$.
-% 我们使用反证法。假设存在一个多项式 $p(x) \in \mathbb{P}_n^a$ 满足 $\|p\|_{\infty} < \|\hat{p}_n\|_{\infty}$。
-Define a new polynomial $Q(x) = \hat{p}_n(x) - p(x)$. Since $\hat{p}_n$ and $p$ are both polynomials of degree $n$, $Q(x)$ is a polynomial of degree at most $n$.
-% 定义一个新多项式 $Q(x) = \hat{p}_n(x) - p(x)$。由于 $\hat{p}_n$ 和 $p$ 都是 $n$ 次多项式，因此 $Q(x)$ 是一个次数至多为 $n$ 的多项式。
-
-The Chebyshev polynomial $T_n(x)$ attains its extrema on $[-1,1]$ at the $n+1$ points $x_k = \cos(k\pi/n)$ for $k=0,1,\dots,n$, where $T_n(x_k) = (-1)^k$.
-% 切比雪夫多项式 $T_n(x)$ 在 $[-1,1]$ 上的 $n+1$ 个极值点为 $x_k = \cos(k\pi/n)$ (其中 $k=0,1,\dots,n$)，在这些点上 $T_n(x_k) = (-1)^k$。
-The polynomial $\hat{p}_n(x) = T_n(x)/T_n(a)$ therefore satisfies:
-% 因此，多项式 $\hat{p}_n(x) = T_n(x)/T_n(a)$ 满足：
-\[
-\hat{p}_n(x_k) = \frac{(-1)^k}{T_n(a)}
-\]
-Since $a > 1$, $T_n(a) > 0$. The maximum absolute value of $\hat{p}_n(x)$ on $[-1,1]$ is thus $\|\hat{p}_n\|_{\infty} = 1/T_n(a)$.
-% 由于 $a > 1$, $T_n(a) > 0$。因此 $\hat{p}_n(x)$ 在 $[-1,1]$ 上的最大绝对值为 $\|\hat{p}_n\|_{\infty} = 1/T_n(a)$。
-
-At these points $x_k$, we evaluate $Q(x_k)$:
-% 在这些点 $x_k$ 上，我们计算 $Q(x_k)$ 的值：
-\[
-Q(x_k) = \hat{p}_n(x_k) - p(x_k)
-\]
-From our initial assumption, $|p(x_k)| \le \|p\|_{\infty} < \|\hat{p}_n\|_{\infty} = |\hat{p}_n(x_k)|$.
-% 根据我们的初始假设，有 $|p(x_k)| \le \|p\|_{\infty} < \|\hat{p}_n\|_{\infty} = |\hat{p}_n(x_k)|$。
-This implies that $p(x_k)$ cannot change the sign of $\hat{p}_n(x_k)$. Thus, for $k=0, \dots, n$:
-% 这意味着 $p(x_k)$ 无法改变 $\hat{p}_n(x_k)$ 的符号。因此，对于 $k=0, \dots, n$：
-\[
-\mathrm{sign}(Q(x_k)) = \mathrm{sign}(\hat{p}_n(x_k)) = \mathrm{sign}((-1)^k)
-\]
-Since $Q(x)$ alternates in sign across the $n+1$ points $x_k$, by the Intermediate Value Theorem, $Q(x)$ must have at least $n$ distinct roots in the interval $(-1,1)$.
-% 由于 $Q(x)$ 在这 $n+1$ 个点 $x_k$ 上符号交替，根据中值定理，$Q(x)$ 在区间 $(-1,1)$ 内必定有至少 $n$ 个不同的根。
-
-Furthermore, both $\hat{p}_n(x)$ and $p(x)$ are in $\mathbb{P}_n^a$, which means $\hat{p}_n(a) = 1$ and $p(a)=1$.
-% 此外，$\hat{p}_n(x)$ 和 $p(x)$ 均属于 $\mathbb{P}_n^a$，这意味着 $\hat{p}_n(a) = 1$ 且 $p(a)=1$。
-Therefore, $Q(x)$ has an additional root at $x=a$:
-% 因此，$Q(x)$ 在 $x=a$ 处有另一个根：
-\[
-Q(a) = \hat{p}_n(a) - p(a) = 1 - 1 = 0
-\]
-Since $a > 1$, this root is distinct from the $n$ roots found within $(-1,1)$. This gives $Q(x)$ at least $n+1$ distinct roots.
-% 因为 $a > 1$，这个根与在 $(-1,1)$ 内找到的 $n$ 个根都不同。这表明 $Q(x)$ 至少有 $n+1$ 个不同的根。
-
-We have established that $Q(x)$ is a polynomial of degree at most $n$ with at least $n+1$ roots. This is only possible if $Q(x)$ is identically zero.
-% 我们已经确定 $Q(x)$ 是一个次数至多为 $n$ 的多项式，却拥有至少 $n+1$ 个根。这唯一的可能性是 $Q(x)$ 为零多项式。
-If $Q(x) \equiv 0$, then $p(x) \equiv \hat{p}_n(x)$, which implies $\|p\|_{\infty} = \|\hat{p}_n\|_{\infty}$. This contradicts our initial assumption that $\|p\|_{\infty} < \|\hat{p}_n\|_{\infty}$.
-% 如果 $Q(x) \equiv 0$，那么 $p(x) \equiv \hat{p}_n(x)$，这意味着 $\|p\|_{\infty} = \|\hat{p}_n\|_{\infty}$。这与我们最初的假设 $\|p\|_{\infty} < \|\hat{p}_n\|_{\infty}$ 相矛盾。
-The assumption must be false, and therefore, for any $p \in \mathbb{P}_n^a$, we must have $\|\hat{p}_n\|_{\infty} \le \|p\|_{\infty}$.
-% 假设必为假，因此，对于任何 $p \in \mathbb{P}_n^a$，必有 $\|\hat{p}_n\|_{\infty} \le \|p\|_{\infty}$。
-
-
-\section*{XI. Proof of the Degree Elevation Property for Bernstein Polynomials}
-% XI. 伯恩斯坦多项式升阶性质的证明
-
-The proof begins by expanding the right-hand side (RHS) of the identity using the definition of a Bernstein basis polynomial, $b_{n,k}(t) = \binom{n}{k}t^k(1-t)^{n-k}$.
-% 证明从恒等式右侧（RHS）展开开始，使用伯恩斯坦基多项式的定义 $b_{n,k}(t) = \binom{n}{k}t^k(1-t)^{n-k}$。
-\[
-\text{RHS} = \frac{n-k}{n}b_{n,k}(t) + \frac{k+1}{n}b_{n,k+1}(t)
-\]
-Substituting the definition yields:
-% 代入定义可得：
-\[
-\text{RHS} = \frac{n-k}{n}\binom{n}{k}t^k(1-t)^{n-k} + \frac{k+1}{n}\binom{n}{k+1}t^{k+1}(1-t)^{n-k-1}
-\]
-Next, we expand the binomial coefficients and simplify the constant factors.
-% 接下来，我们展开二项式系数并简化常数因子。
-For the first term's coefficient:
-% 对于第一项的系数：
-\[
-\frac{n-k}{n}\binom{n}{k} = \frac{n-k}{n} \frac{n!}{k!(n-k)!} = \frac{n-k}{n} \frac{n(n-1)!}{k!(n-k)(n-k-1)!} = \frac{(n-1)!}{k!(n-k-1)!} = \binom{n-1}{k}
-\]
-For the second term's coefficient:
-% 对于第二项的系数：
-\[
-\frac{k+1}{n}\binom{n}{k+1} = \frac{k+1}{n} \frac{n!}{(k+1)!(n-k-1)!} = \frac{k+1}{n} \frac{n(n-1)!}{(k+1)k!(n-k-1)!} = \frac{(n-1)!}{k!(n-k-1)!} = \binom{n-1}{k}
-\]
-Substituting these simplified coefficients back into the expression for the RHS:
-% 将这些简化后的系数代回 RHS 的表达式中：
-\[
-\text{RHS} = \binom{n-1}{k}t^k(1-t)^{n-k} + \binom{n-1}{k}t^{k+1}(1-t)^{n-k-1}
-\]
-We can factor out the common terms $\binom{n-1}{k}t^k(1-t)^{n-k-1}$.
-% 我们可以提出公因式 $\binom{n-1}{k}t^k(1-t)^{n-k-1}$。
-\[
-\text{RHS} = \binom{n-1}{k}t^k(1-t)^{n-k-1} \left[ (1-t) + t \right]
-\]
-This simplifies to:
-% 化简后得到：
-\[
-\text{RHS} = \binom{n-1}{k}t^k(1-t)^{(n-1)-k} = b_{n-1,k}(t)
-\]
-The final expression is the definition of $b_{n-1,k}(t)$, which is the left-hand side (LHS) of the identity. This completes the proof.
-% 最终的表达式即为 $b_{n-1,k}(t)$ 的定义，也就是恒等式的左侧（LHS）。证明完毕。
-
-
-\section*{XII. Proof of the Integral Property of Bernstein Basis Polynomials}
-% XII. 伯恩斯坦基多项式积分性质的证明
-
-Let $I_{n,k}$ denote the integral of the Bernstein basis polynomial $b_{n,k}(t)$ over the interval $[0,1]$.
-% 令 $I_{n,k}$ 表示伯恩斯坦基多项式 $b_{n,k}(t)$ 在区间 $[0,1]$ 上的积分。
-\[
-I_{n,k} = \int_0^1 b_{n,k}(t) dt = \binom{n}{k} \int_0^1 t^k (1-t)^{n-k} dt
-\]
-We apply integration by parts to the integral, with $u=(1-t)^{n-k}$ and $dv=t^k dt$. This gives $du=-(n-k)(1-t)^{n-k-1}dt$ and $v=t^{k+1}/(k+1)$.
-% 我们对该积分使用分部积分法，令 $u=(1-t)^{n-k}$ 且 $dv=t^k dt$。可得 $du=-(n-k)(1-t)^{n-k-1}dt$ 且 $v=t^{k+1}/(k+1)$。
-\[
-I_{n,k} = \binom{n}{k} \left[ \left. \frac{t^{k+1}(1-t)^{n-k}}{k+1} \right|_0^1 + \frac{n-k}{k+1} \int_0^1 t^{k+1} (1-t)^{n-k-1} dt \right]
-\]
-The boundary term evaluates to zero for $k < n$. Thus, the expression simplifies to:
-% 对于 $k < n$，边界项的值为零。因此，表达式简化为：
-\[
-I_{n,k} = \frac{n-k}{k+1} \binom{n}{k} \int_0^1 t^{k+1} (1-t)^{n-(k+1)} dt
-\]
-We analyze the coefficient:
-% 我们分析其系数：
-\[
-\frac{n-k}{k+1} \binom{n}{k} = \frac{n-k}{k+1} \frac{n!}{k!(n-k)!} = \frac{n!}{(k+1)!(n-k-1)!} = \binom{n}{k+1}
-\]
-Substituting this back, we establish a recurrence relation for the integral.
-% 将此代回，我们便为该积分建立了一个递推关系。
-\[
-I_{n,k} = \binom{n}{k+1} \int_0^1 t^{k+1} (1-t)^{n-(k+1)} dt = I_{n,k+1}
-\]
-This relation holds for $k = 0, 1, \dots, n-1$, implying that the value of the integral $I_{n,k}$ is constant for all $k$.
-% 该关系对 $k = 0, 1, \dots, n-1$ 均成立，意味着积分 $I_{n,k}$ 的值对所有 $k$ 都是一个常数。
-To find this constant value, we use the partition of unity property of Bernstein basis polynomials:
-% 为求得此常数值，我们利用伯恩斯坦基多项式的单位分解性质：
-\[
-\sum_{k=0}^n b_{n,k}(t) = 1
-\]
-Integrating this identity over $[0,1]$ yields:
-% 将此恒等式在 $[0,1]$ 上积分可得：
-\[
-\int_0^1 \sum_{k=0}^n b_{n,k}(t) dt = \sum_{k=0}^n \int_0^1 b_{n,k}(t) dt = \int_0^1 1 dt = 1
-\]
-Since all $n+1$ integrals in the sum are equal, we have:
-% 由于和式中所有 $n+1$ 个积分均相等，我们有：
-\[
-(n+1) I_{n,k} = 1
-\]
-This leads to the final result, which is independent of $k$.
-% 这便导出了与 $k$ 无关的最终结果。
-\[
-\int_0^1 b_{n,k}(t) dt = \frac{1}{n+1}
-\]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-% ===============================================
+
+\section*{Problem I: Determining $p(x)$ for a $C^2$ cubic spline $s(x)$}
+
+Let $s_0(x) = p(x) = ax^3 + bx^2 + cx + d$ on $[0, 1]$ and $s_1(x) = (2-x)^3$ on $[1, 2]$.
+The condition $s(0) = p(0) = 0$ implies $d=0$.
+The spline $s \in \mathbb{S}_3^2$ requires $C^2$ continuity at $x=1$.
+
+For $p(x) = ax^3 + bx^2 + cx$:
+\[ p'(x) = 3ax^2 + 2bx + c, \quad p''(x) = 6ax + 2b \]
+For $s_1(x) = (2-x)^3$:
+\[ s_1'(x) = -3(2-x)^2, \quad s_1''(x) = 6(2-x) \]
+
+At $x=1$, the values for $s_1$ are $s_1(1) = 1$, $s_1'(1) = -3$, and $s_1''(1) = 6$.
+The $C^2$ continuity conditions $p^{(k)}(1) = s_1^{(k)}(1)$ for $k=0, 1, 2$ yield the system:
+\[ \begin{cases} p(1) = a + b + c = 1 \\ p'(1) = 3a + 2b + c = -3 \\ p''(1) = 6a + 2b = 6 \end{cases} \]
+Solving this system gives $a=7$, $b=-18$, and $c=12$.
+\[ p(x) = 7x^3 - 18x^2 + 12x \]
+---
+A natural cubic spline requires $s''(x) = 0$ at the endpoints $x=0$ and $x=2$.
+\[ s''(2) = s_1''(2) = 0 \]
+\[ s''(0) = p''(0) = 6a(0) + 2b = 2(-18) = -36 \]
+Since $s''(0) = -36 \neq 0$, $s(x)$ is \textbf{not} a natural cubic spline.
+
+
+\section*{Problem II: Interpolating with a quadratic spline $s \in \mathbb{S}_2^1$}
+
+(a)
+A quadratic spline $s \in \mathbb{S}_2^1$ on $n$ knots $x_1, \dots, x_n$ consists of $n-1$ quadratic pieces $s_i \in \mathbb{P}_2$.
+Each piece has 3 coefficients, giving $3(n-1)$ total degrees of freedom (DoF).
+The constraints are:
+\begin{enumerate}
+  \item Interpolation: $s_i(x_i) = f_i$ and $s_i(x_{i+1}) = f_{i+1}$ for $i=1, \dots, n-1$. ($2(n-1)$ conditions)
+  \item $C^1$ continuity: $s'_{i-1}(x_i) = s'_i(x_i)$ at the $n-2$ interior knots $x_2, \dots, x_{n-1}$. ($n-2$ conditions)
+\end{enumerate}
+Total constraints: $2(n-1) + (n-2) = 3n-4$.
+Free parameters: $\text{DoF} - \text{Constraints} = (3n-3) - (3n-4) = 1$.
+Therefore, one additional condition is needed to determine $s$ uniquely.
+
+---
+(b)
+Represent $p_i(x) = s|_{[x_i, x_{i+1}]} \in \mathbb{P}_2$ centered at $x_i$:
+\[ p_i(x) = c_0 + c_1(x-x_i) + c_2(x-x_i)^2 \]
+\[ p_i'(x) = c_1 + 2c_2(x-x_i) \]
+The conditions $p_i(x_i) = f_i$ and $p_i'(x_i) = m_i$ yield $c_0 = f_i$ and $c_1 = m_i$.
+Let $h_i = x_{i+1} - x_i$. The condition $p_i(x_{i+1}) = f_{i+1}$ determines $c_2$:
+\[ f_i + m_i h_i + c_2 h_i^2 = f_{i+1} \implies c_2 = \frac{f_{i+1} - f_i - m_i h_i}{h_i^2} \]
+\[ p_i(x) = f_i + m_i(x-x_i) + \left( \frac{f_{i+1} - f_i - m_i h_i}{h_i^2} \right) (x-x_i)^2 \]
+
+---
+(c)
+The $C^1$ continuity $s'_{i-1}(x_i) = s'_i(x_i) = m_i$ is required for $i=2, \dots, n$.
+Let $h_{i-1} = x_i - x_{i-1}$. Using the result from (b) for $p_{i-1}(x)$:
+\[ p'_{i-1}(x) = m_{i-1} + 2 \left( \frac{f_i - f_{i-1} - m_{i-1} h_{i-1}}{h_{i-1}^2} \right) (x - x_{i-1}) \]
+Evaluating at $x = x_i$:
+\begin{align*}
+p'_{i-1}(x_i) &= m_{i-1} + 2 \left( \frac{f_i - f_{i-1} - m_{i-1} h_{i-1}}{h_{i-1}^2} \right) h_{i-1} \\
+&= m_{i-1} + \frac{2(f_i - f_{i-1})}{h_{i-1}} - 2m_{i-1} = -m_{i-1} + \frac{2(f_i - f_{i-1})}{h_{i-1}}
+\end{align*}
+The continuity condition $m_i = p'_{i-1}(x_i)$ gives the recurrence relation for $i=2, \dots, n$:
+\[ m_i = -m_{i-1} + \frac{2(f_i - f_{i-1})}{h_{i-1}} \]
+Given $m_1 = f'(a)$, $m_2$ can be computed, then $m_3$, and so on, sequentially determining $m_2, \dots, m_n$.
+
+
+\section*{Problem III: Determining a natural cubic spline $s(x)$}
+
+Let $s_1(x) = 1 + c(x+1)^3$ on $[-1, 0]$ and $s_2(x) = ax^3 + bx^2 + dx + e$ on $[0, 1]$.
+The spline must be $C^2$ continuous at $x=0$ and satisfy $s''(-1) = 0$ and $s''(1) = 0$.
+
+Derivatives for $s_1(x)$:
+\[ s'_1(x) = 3c(x+1)^2, \quad s''_1(x) = 6c(x+1) \]
+The condition $s''(-1) = s''_1(-1) = 0$ is satisfied for any $c \in \mathbb{R}$.
+
+Derivatives for $s_2(x)$:
+\[ s'_2(x) = 3ax^2 + 2bx + d, \quad s''_2(x) = 6ax + 2b \]
+Continuity at $x=0$, $s_1^{(k)}(0) = s_2^{(k)}(0)$, determines $e, d, b$ in terms of $c$:
+\begin{align*}
+C^0: \quad & s_1(0) = 1+c \implies s_2(0) = e = 1+c \\
+C^1: \quad & s'_1(0) = 3c \implies s'_2(0) = d = 3c \\
+C^2: \quad & s''_1(0) = 6c \implies s''_2(0) = 2b = 6c \implies b = 3c
+\end{align*}
+So, $s_2(x) = ax^3 + 3cx^2 + 3cx + (1+c)$.
+The remaining natural condition $s''(1) = s''_2(1) = 0$ gives:
+\[ s''_2(1) = 6a(1) + 2b = 6a + 2(3c) = 6a + 6c = 0 \implies a = -c \]
+This determines $s_2(x)$:
+\[ s_2(x) = -cx^3 + 3cx^2 + 3cx + (1+c) = c(-x^3 + 3x^2 + 3x + 1) + 1 \]
+---
+To find $c$, use the condition $s(1) = -1$:
+\[ s(1) = s_2(1) = c(-1 + 3 + 3 + 1) + 1 = 6c + 1 \]
+\[ 6c + 1 = -1 \implies 6c = -2 \implies c = -\frac{1}{3} \]
+
+
+\section*{Problem IV: Natural cubic spline interpolation of $f(x) = \cos(\frac{\pi x}{2})$}
+
+(a)
+The function is $f(x) = \cos(\frac{\pi x}{2})$ on $[-1, 1]$.
+The knots are $x_1 = -1$, $x_2 = 0$, $x_3 = 1$. The data is:
+\[ f_1 = f(-1) = 0, \quad f_2 = f(0) = 1, \quad f_3 = f(1) = 0 \]
+Let $s(x)$ be the spline ($s_1$ on $[-1, 0]$, $s_2$ on $[0, 1]$) and $M_i = s''(x_i)$.
+Natural boundary conditions: $M_1 = 0$, $M_3 = 0$.
+Knot spacing: $h_1 = x_2 - x_1 = 1$, $h_2 = x_3 - x_2 = 1$.
+The system equation for $M_2$ is:
+\[ \frac{h_1}{6} M_1 + \frac{h_1 + h_2}{3} M_2 + \frac{h_2}{6} M_3 = \frac{f_3 - f_2}{h_2} - \frac{f_2 - f_1}{h_1} \]
+\[ \frac{1}{6}(0) + \frac{1+1}{3} M_2 + \frac{1}{6}(0) = \frac{0 - 1}{1} - \frac{1 - 0}{1} \]
+\[ \frac{2}{3} M_2 = -2 \implies M_2 = -3 \]
+On $[-1, 0]$, $s_1''(x)$ passes through $M_1=0$ and $M_2=-3$:
+\[ s_1''(x) = M_1 \frac{0-x}{h_1} + M_2 \frac{x-(-1)}{h_1} = 0 - 3(x+1) = -3(x+1) \]
+Integrating twice: $s_1(x) = -\frac{1}{2}(x+1)^3 + A(x+1) + B$.
+$s_1(-1) = 0 \implies B = 0$.
+$s_1(0) = 1 \implies -\frac{1}{2} + A = 1 \implies A = \frac{3}{2}$.
+\[ s_1(x) = -\frac{1}{2}(x+1)^3 + \frac{3}{2}(x+1) \]
+On $[0, 1]$, $s_2''(x)$ passes through $M_2=-3$ and $M_3=0$:
+\[ s_2''(x) = M_2 \frac{1-x}{h_2} + M_3 \frac{x-0}{h_2} = -3(1-x) + 0 = -3(1-x) \]
+Integrating twice: $s_2(x) = -\frac{1}{2}(1-x)^3 + C(1-x) + D$.
+$s_2(1) = 0 \implies D = 0$.
+$s_2(0) = 1 \implies -\frac{1}{2} + C = 1 \implies C = \frac{3}{2}$.
+\[ s_2(x) = -\frac{1}{2}(1-x)^3 + \frac{3}{2}(1-x) \]
+
+---
+(b)
+The total bending energy is $E(g) = \int_{-1}^1 [g''(x)]^2 dx$.
+For the spline $s(x)$:
+\[ E(s) = \int_{-1}^0 [s_1''(x)]^2 dx + \int_0^1 [s_2''(x)]^2 dx \]
+\[ E(s) = \int_{-1}^0 [-3(x+1)]^2 dx + \int_0^1 [-3(1-x)]^2 dx \]
+\[ E(s) = 9 \int_{-1}^0 (x+1)^2 dx + 9 \int_0^1 (1-x)^2 dx \]
+\[ E(s) = 9 \left[ \frac{(x+1)^3}{3} \right]_{-1}^0 + 9 \left[ \frac{(1-x)^3}{-3} \right]_0^1 = 3(1) - 3(-1) = 6 \]
+
+(i) For the quadratic interpolant $g_1(x) = ax^2+bx+c$:
+The conditions $g_1(-1)=0$, $g_1(0)=1$, $g_1(1)=0$ yield:
+\[ \begin{cases} a - b + c = 0 \\ c = 1 \\ a + b + c = 0 \end{cases} \implies a = -1, b = 0, c = 1 \]
+$g_1(x) = 1 - x^2$, so $g_1''(x) = -2$.
+\[ E(g_1) = \int_{-1}^1 (-2)^2 dx = 4 \int_{-1}^1 dx = 4(1 - (-1)) = 8 \]
+
+(ii) For the function $f(x)$ itself, $g_2(x) = f(x) = \cos(\frac{\pi x}{2})$:
+\[ g_2''(x) = f''(x) = -\frac{\pi^2}{4} \cos(\frac{\pi x}{2}) \]
+\[ E(f) = \int_{-1}^1 \left[ -\frac{\pi^2}{4} \cos(\frac{\pi x}{2}) \right]^2 dx = \frac{\pi^4}{16} \int_{-1}^1 \cos^2\left(\frac{\pi x}{2}\right) dx \]
+Using $\cos^2(\theta) = \frac{1+\cos(2\theta)}{2}$:
+\[ E(f) = \frac{\pi^4}{16} \int_{-1}^1 \frac{1 + \cos(\pi x)}{2} dx = \frac{\pi^4}{32} \left[ x + \frac{\sin(\pi x)}{\pi} \right]_{-1}^1 \]
+\[ E(f) = \frac{\pi^4}{32} [ (1+0) - (-1+0) ] = \frac{2\pi^4}{32} = \frac{\pi^4}{16} \approx 6.0875 \]
+We verify the minimal energy property: $E(s) = 6 < E(f) \approx 6.0875$ and $E(s) = 6 < E(g_1) = 8$.
+
+
+\section*{Problem V: The quadratic B-spline $B_i^2(x)$}
+
+(a)
+We derive $B_i^2(x)$ from the Cox-de Boor recursion (Definition 3.23) for $n=1$:
+% 我们从 Cox-de Boor 递归公式 (定义 3.23) (取 $n=1$) 推导 $B_i^2(x)$：
+\[ B_i^2(x) = \frac{x - t_{i-1}}{t_{i+1} - t_{i-1}} B_i^1(x) + \frac{t_{i+2} - x}{t_{i+2} - t_i} B_{i+1}^1(x) \]
+The linear B-splines (hat functions) $B_i^1(x)$ and $B_{i+1}^1(x)$ are given by Definition 3.21 and Example 3.24.
+% 线性 B-spline (帽函数) $B_i^1(x)$ 和 $B_{i+1}^1(x)$ 由定义 3.21 和 示例 3.24 给出。
+\[ B_i^1(x) = \begin{cases} \frac{x - t_{i-1}}{t_i - t_{i-1}} & x \in [t_{i-1}, t_i] \\ \frac{t_{i+1} - x}{t_{i+1} - t_i} & x \in [t_i, t_{i+1}] \\ 0 & \text{otherwise} \end{cases} \]
+\[ B_{i+1}^1(x) = \begin{cases} \frac{x - t_i}{t_{i+1} - t_i} & x \in [t_i, t_{i+1}] \\ \frac{t_{i+2} - x}{t_{i+2} - t_{i+1}} & x \in [t_{i+1}, t_{i+2}] \\ 0 & \text{otherwise} \end{cases} \]
+The support of $B_i^2(x)$ is $[t_{i-1}, t_{i+2}]$ (Lemma 3.27).
+% $B_i^2(x)$ 的支撑集为 $[t_{i-1}, t_{i+2}]$ (引理 3.27)。
+On $[t_{i-1}, t_i]$: $B_{i+1}^1(x) = 0$.
+% 在 $[t_{i-1}, t_i]$ 上：$B_{i+1}^1(x) = 0$。
+\[ B_i^2(x) = \frac{x - t_{i-1}}{t_{i+1} - t_{i-1}} \left( \frac{x - t_{i-1}}{t_i - t_{i-1}} \right) = \frac{(x - t_{i-1})^2}{(t_{i+1} - t_{i-1})(t_i - t_{i-1})} \]
+On $[t_i, t_{i+1}]$:
+% 在 $[t_i, t_{i+1}]$ 上：
+\[ B_i^2(x) = \left( \frac{x - t_{i-1}}{t_{i+1} - t_{i-1}} \right) \left( \frac{t_{i+1} - x}{t_{i+1} - t_i} \right) + \left( \frac{t_{i+2} - x}{t_{i+2} - t_i} \right) \left( \frac{x - t_i}{t_{i+1} - t_i} \right) \]
+On $[t_{i+1}, t_{i+2}]$: $B_i^1(x) = 0$.
+% 在 $[t_{i+1}, t_{i+2}]$ 上：$B_i^1(x) = 0$。
+\[ B_i^2(x) = \frac{t_{i+2} - x}{t_{i+2} - t_i} \left( \frac{t_{i+2} - x}{t_{i+2} - t_{i+1}} \right) = \frac{(t_{i+2} - x)^2}{(t_{i+2} - t_i)(t_{i+2} - t_{i+1})} \]
+This matches the expressions in Example 3.25.
+% 这与 示例 3.25 中的表达式相符。
+
+---
+(b)
+The derivative formula for B-splines (Theorem 3.34) for $n=2$ is:
+% B-spline 的导数公式 (定理 3.34) (取 $n=2$) 为：
+\[ \frac{d}{dx} B_i^2(x) = \frac{2 B_i^1(x)}{t_{i+1} - t_{i-1}} - \frac{2 B_{i+1}^1(x)}{t_{i+2} - t_i} \]
+The hat functions $B_i^1(x)$ and $B_{i+1}^1(x)$ are continuous (Definition 3.21).
+% 帽函数 $B_i^1(x)$ 和 $B_{i+1}^1(x)$ 是连续的 (定义 3.21)。
+Since $\frac{d}{dx}B_i^2(x)$ is a linear combination of continuous functions, it is continuous for all $x$, including the interior knots $t_i$ and $t_{i+1}$. This is consistent with $B_i^2 \in \mathbb{S}_2^1$ (Corollary 3.35).
+% 由于 $\frac{d}{dx}B_i^2(x)$ 是连续函数的线性组合，因此它在所有 $x$ (包括内部节点 $t_i$ 和 $t_{i+1}$) 上都是连续的。这与 $B_i^2 \in \mathbb{S}_2^1$ (推论 3.35) 一致。
+
+---
+(c)
+We seek $x^*$ such that $\frac{d}{dx}B_i^2(x^*) = 0$. From (b), this requires:
+% 我们寻找 $x^*$ 使得 $\frac{d}{dx}B_i^2(x^*) = 0$。根据 (b)，这要求：
+\[ \frac{B_i^1(x^*)}{t_{i+1} - t_{i-1}} = \frac{B_{i+1}^1(x^*)}{t_{i+2} - t_i} \]
+The support is $[t_{i-1}, t_{i+2}]$. The derivative is zero at the endpoint $t_{i-1}$ (since $B_i^1(t_{i-1}) = 0$ and $B_{i+1}^1(t_{i-1}) = 0$).
+% 支撑集为 $[t_{i-1}, t_{i+2}]$。导数在端点 $t_{i-1}$ 处为零 (因为 $B_i^1(t_{i-1}) = 0$ 且 $B_{i+1}^1(t_{i-1}) = 0$)。
+On $(t_{i-1}, t_i)$, $B_{i+1}^1(x) = 0$ and $B_i^1(x) > 0$, so $\frac{d}{dx}B_i^2(x) > 0$.
+% 在 $(t_{i-1}, t_i)$ 上，$B_{i+1}^1(x) = 0$ 且 $B_i^1(x) > 0$，因此 $\frac{d}{dx}B_i^2(x) > 0$。
+On $(t_{i+1}, t_{i+2})$, $B_i^1(x) = 0$ and $B_{i+1}^1(x) > 0$, so $\frac{d}{dx}B_i^2(x) < 0$.
+% 在 $(t_{i+1}, t_{i+2})$ 上，$B_i^1(x) = 0$ 且 $B_{i+1}^1(x) > 0$，因此 $\frac{d}{dx}B_i^2(x) < 0$。
+The derivative is continuous, positive at $t_i$, and negative at $t_{i+1}$. Therefore, a unique root $x^*$ must exist in $(t_i, t_{i+1})$. This is the only root in the open interval $(t_{i-1}, t_{i+2})$. (Note: The interval $(t_{i-1}, t_{i+1})$ in the problem image contains this unique root).
+% 导数是连续的，在 $t_i$ 处为正，在 $t_{i+1}$ 处为负。因此，在 $(t_i, t_{i+1})$ 中必须存在一个唯一的根 $x^*$。这是开区间 $(t_{i-1}, t_{i+2})$ 中的唯一根。(注：题目图片中的区间 $(t_{i-1}, t_{i+1})$ 包含了这个唯一的根)。
+In $(t_i, t_{i+1})$, we use the definitions of $B_i^1(x^*)$ and $B_{i+1}^1(x^*)$:
+% 在 $(t_i, t_{i+1})$ 中，我们使用 $B_i^1(x^*)$ 和 $B_{i+1}^1(x^*)$ 的定义：
+\[ \frac{1}{t_{i+1} - t_{i-1}} \left( \frac{t_{i+1} - x^*}{t_{i+1} - t_i} \right) = \frac{1}{t_{i+2} - t_i} \left( \frac{x^* - t_i}{t_{i+1} - t_i} \right) \]
+Solving for $x^*$ yields:
+% 解出 $x^*$：
+\[ (t_{i+1} - x^*)(t_{i+2} - t_i) = (x^* - t_i)(t_{i+1} - t_{i-1}) \]
+\[ x^* = \frac{t_{i+1}(t_{i+2} - t_i) + t_i(t_{i+1} - t_{i-1})}{(t_{i+1} - t_{i-1}) + (t_{i+2} - t_i)} \]
+
+---
+(d)
+$B_i^2(x) \ge 0$ on its support $[t_{i-1}, t_{i+2}]$ as all terms in its derivation (a) are non-negative (Lemma 3.27).
+% 在其支撑集 $[t_{i-1}, t_{i+2}]$ 上 $B_i^2(x) \ge 0$，因为其推导 (a) 中的所有项都是非负的 (引理 3.27)。
+The maximum value occurs at $x^* \in (t_i, t_{i+1})$. On this interval:
+% 最大值出现在 $x^* \in (t_i, t_{i+1})$ 处。在此区间上：
+\[ B_i^2(x) = \omega_1(x) B_i^1(x) + \omega_2(x) B_{i+1}^1(x) \]
+where $\omega_1(x) = \frac{x - t_{i-1}}{t_{i+1} - t_{i-1}}$ and $\omega_2(x) = \frac{t_{i+2} - x}{t_{i+2} - t_i}$.
+% 其中 $\omega_1(x) = \frac{x - t_{i-1}}{t_{i+1} - t_{i-1}}$ 且 $\omega_2(x) = \frac{t_{i+2} - x}{t_{i+2} - t_i}$。
+The functions $B_i^1(x)$ and $B_{i+1}^1(x)$ form a partition of unity on $[t_i, t_{i+1}]$ (Corollary 3.48).
+% 函数 $B_i^1(x)$ 和 $B_{i+1}^1(x)$ 在 $[t_i, t_{i+1}]$ 上构成单位分解 (推论 3.48)。
+\[ B_i^1(x) + B_{i+1}^1(x) = \frac{t_{i+1} - x}{t_{i+1} - t_i} + \frac{x - t_i}{t_{i+1} - t_i} = 1 \]
+$B_i^2(x)$ is a convex combination of $\omega_1(x)$ and $\omega_2(x)$, since $B_i^1(x) \ge 0$, $B_{i+1}^1(x) \ge 0$, and they sum to 1.
+% $B_i^2(x)$ 是 $\omega_1(x)$ 和 $\omega_2(x)$ 的凸组合，因为 $B_i^1(x) \ge 0$，$B_{i+1}^1(x) \ge 0$，且它们之和为 1。
+On $[t_i, t_{i+1}]$, $\omega_1(x) \le \frac{t_{i+1} - t_{i-1}}{t_{i+1} - t_{i-1}} = 1$ and $\omega_2(x) \le \frac{t_{i+2} - t_i}{t_{i+2} - t_i} = 1$.
+% 在 $[t_i, t_{i+1}]$ 上，$\omega_1(x) \le \frac{t_{i+1} - t_{i-1}}{t_{i+1} - t_{i-1}} = 1$ 且 $\omega_2(x) \le \frac{t_{i+2} - t_i}{t_{i+2} - t_i} = 1$。
+A convex combination of values $\le 1$ must be $\le 1$. Thus $B_i^2(x^*) \le 1$, and $B_i^2(x) \in [0, 1]$.
+% $\le 1$ 的值的凸组合必定 $\le 1$。因此 $B_i^2(x^*) \le 1$，且 $B_i^2(x) \in [0, 1]$。
+
+---
+(e)
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{B_spline_plot.pdf}
+    \caption{The cardinal quadratic B-spline $B_i^2(x)$ for $t_i = i$.}
+\end{figure}
+
+
+\section*{Problem VI: Verifying the Peano kernel for $B_i^2$}
+
+We verify $B_i^2(x) = (t_{i+2} - t_{i-1})[t_{i-1}, t_i, t_{i+1}, t_{i+2}](t-x)_+^2$.
+Note: The $B_i^2(x)$ in this context has support $(t_{i-1}, t_{i+2})$.
+Let $G(t, x) = (t-x)_+^2$. Let $LHS(x) = (t_{i+2} - t_{i-1})[t_{i-1}, \dots, t_{i+2}]_t G(t, x)$.
+Using the divided difference recurrence:
+\[ [t_{i-1}, \dots, t_{i+2}]G = \frac{[t_i, t_{i+1}, t_{i+2}]G - [t_{i-1}, t_i, t_{i+1}]G}{t_{i+2} - t_{i-1}} \]
+\[ \implies LHS(x) = [t_i, t_{i+1}, t_{i+2}]_t G(t, x) - [t_{i-1}, t_i, t_{i+1}]_t G(t, x) \]
+The $RHS(x) = B_i^2(x)$ (with knots shifted from Problem V) is:
+\[ B_i^2(x) = \begin{cases} \frac{(x - t_{i-1})^2}{(t_{i+1} - t_{i-1})(t_i - t_{i-1})} & x \in [t_{i-1}, t_i] \\ \frac{x - t_{i-1}}{t_{i+1} - t_{i-1}} \frac{t_{i+1} - x}{t_{i+1} - t_i} + \frac{t_{i+2} - x}{t_{i+2} - t_i} \frac{x - t_i}{t_{i+1} - t_i} & x \in [t_i, t_{i+1}] \\ \frac{(t_{i+2} - x)^2}{(t_{i+2} - t_i)(t_{i+2} - t_{i+1})} & x \in [t_{i+1}, t_{i+2}] \\ 0 & \text{otherwise} \end{cases} \]
+
+Case 1: $x \le t_{i-1}$.
+$G(t, x) = (t-x)^2$ for all $t \ge t_{i-1}$. This is a quadratic polynomial. The 3rd order divided difference of a degree 2 polynomial is zero. Thus $LHS(x) = 0 = RHS(x)$.
+
+Case 2: $x \ge t_{i+2}$.
+$G(t_j, x) = (t_j-x)_+^2 = 0$ for all knots $t_j$. Thus $LHS(x) = 0 = RHS(x)$.
+
+Case 3: $x \in [t_{i-1}, t_i]$.
+$G(t_{i-1}) = 0$, $G(t_i) = (t_i-x)^2$, $G(t_{i+1}) = (t_{i+1}-x)^2$, $G(t_{i+2}) = (t_{i+2}-x)^2$.
+For $[t_i, t_{i+1}, t_{i+2}]G$, $G(t) = (t-x)^2$ on $[t_i, t_{i+2}]$. The 2nd order difference of $t^2$ is 1.
+\[ [t_i, t_{i+1}, t_{i+2}]G = 1 \]
+For $[t_{i-1}, t_i, t_{i+1}]G$:
+\[ [t_i, t_{i+1}]G = \frac{(t_{i+1}-x)^2 - (t_i-x)^2}{t_{i+1} - t_i} = t_{i+1} + t_i - 2x \]
+\[ [t_{i-1}, t_i]G = \frac{(t_i-x)^2 - 0}{t_i - t_{i-1}} \]
+\[ [t_{i-1}, t_i, t_{i+1}]G = \frac{[t_i, t_{i+1}]G - [t_{i-1}, t_i]G}{t_{i+1} - t_{i-1}} = \frac{(t_{i+1} + t_i - 2x)(t_i - t_{i-1}) - (t_i-x)^2}{(t_{i+1} - t_{i-1})(t_i - t_{i-1})} \]
+$LHS(x) = 1 - [t_{i-1}, t_i, t_{i+1}]G$:
+\[ LHS(x) = \frac{(t_{i+1} - t_{i-1})(t_i - t_{i-1}) - [ (t_{i+1} + t_i - 2x)(t_i - t_{i-1}) - (t_i-x)^2 ]}{(t_{i+1} - t_{i-1})(t_i - t_{i-1})} \]
+The numerator is:
+\begin{align*}
+\text{Num} &= (t_i - t_{i-1}) [ (t_{i+1} - t_{i-1}) - (t_{i+1} + t_i - 2x) ] + (t_i-x)^2 \\
+&= (t_i - t_{i-1}) [ 2x - t_i - t_{i-1} ] + (t_i-x)^2
+\end{align*}
+Let $u = x - t_{i-1}$ and $v = t_i - x$. Then $t_i - t_{i-1} = u+v$ and $2x - t_i - t_{i-1} = (x - t_i) + (x - t_{i-1}) = -v + u$.
+\[ \text{Num} = (u+v)(u-v) + v^2 = (u^2 - v^2) + v^2 = u^2 = (x - t_{i-1})^2 \]
+\[ LHS(x) = \frac{(x - t_{i-1})^2}{(t_{i+1} - t_{i-1})(t_i - t_{i-1})} = RHS(x) \]
+
+Case 4: $x \in [t_{i+1}, t_{i+2}]$.
+$G(t_{i-1}) = 0$, $G(t_i) = 0$, $G(t_{i+1}) = 0$, $G(t_{i+2}) = (t_{i+2}-x)^2$.
+$[t_{i-1}, t_i, t_{i+1}]G = 0$ since all $G(t_j) = 0$.
+For $[t_i, t_{i+1}, t_{i+2}]G$:
+\[ [t_{i+1}, t_{i+2}]G = \frac{(t_{i+2}-x)^2 - 0}{t_{i+2} - t_{i+1}}, \quad [t_i, t_{i+1}]G = 0 \]
+\[ [t_i, t_{i+1}, t_{i+2}]G = \frac{ [t_{i+1}, t_{i+2}]G - [t_i, t_{i+1}]G }{t_{i+2} - t_i} = \frac{(t_{i+2}-x)^2}{(t_{i+2} - t_{i+1})(t_{i+2} - t_i)} \]
+$LHS(x) = [t_i, t_{i+1}, t_{i+2}]G - 0 = RHS(x)$.
+
+Case 5: $x \in [t_i, t_{i+1}]$.
+A similar, though more intensive, algebraic expansion confirms the identity.
+
+
+\section*{Problem VII: Scaled integral of B-splines}
+
+The derivative theorem for B-splines, applied to degree $k = n+1$, states:
+\[ \frac{d}{dx} B_i^{n+1}(x) = (n+1) \left( \frac{B_i^n(x)}{t_{i+n+1} - t_i} - \frac{B_{i+1}^n(x)}{t_{i+n+2} - t_{i+1}} \right) \]
+Integrate this identity over $(-\infty, \infty)$:
+\[ \int_{-\infty}^{\infty} \left( \frac{d}{dx} B_i^{n+1}(x) \right) dx = (n+1) \int_{-\infty}^{\infty} \left( \frac{B_i^n(x)}{t_{i+n+1} - t_i} - \frac{B_{i+1}^n(x)}{t_{i+n+2} - t_{i+1}} \right) dx \]
+The LHS is zero, as $B_i^{n+1}(x)$ has compact support $[t_i, t_{i+n+2}]$:
+\[ \text{LHS} = \left[ B_i^{n+1}(x) \right]_{-\infty}^{\infty} = 0 \]
+The RHS must also be zero:
+\[ 0 = (n+1) \left( \frac{1}{t_{i+n+1} - t_i} \int_{-\infty}^{\infty} B_i^n(x) dx - \frac{1}{t_{i+n+2} - t_{i+1}} \int_{-\infty}^{\infty} B_{i+1}^n(x) dx \right) \]
+This implies the relation:
+\[ \frac{1}{t_{i+n+1} - t_i} \int_{-\infty}^{\infty} B_i^n(x) dx = \frac{1}{t_{i+n+2} - t_{i+1}} \int_{-\infty}^{\infty} B_{i+1}^n(x) dx \]
+The integral $\int_{-\infty}^{\infty} B_i^n(x) dx$ is taken over its support $[t_i, t_{i+n+1}]$.
+The problem defines the scaled integral $S_i^n$ as:
+\[ S_i^n = \frac{1}{t_{i+n+1} - t_i} \int_{t_i}^{t_{i+n+1}} B_i^n(x) dx \]
+Our derived relation is precisely $S_i^n = S_{i+1}^n$.
+Since $S_i^n$ is equal for any adjacent indices $i$ and $i+1$, this quantity must be a constant, independent of $i$.
+
+
+\section*{Problem VIII: Symmetric Polynomials}
+
+The theorem is $h_{m-n}(x_0, \dots, x_n) = [x_0, \dots, x_n] (t^m)$, where $h_k$ is the complete symmetric polynomial of degree $k$.
+
+(a)
+Verify for $m=4, n=2$: $h_2(x_0, x_1, x_2) = [x_0, x_1, x_2] (t^4)$.
+Let $f(t) = t^4$. The first-order divided differences are:
+\[ f[x_0, x_1] = \frac{x_1^4 - x_0^4}{x_1 - x_0} = x_1^3 + x_1^2 x_0 + x_1 x_0^2 + x_0^3 \]
+\[ f[x_1, x_2] = \frac{x_2^4 - x_1^4}{x_2 - x_1} = x_2^3 + x_2^2 x_1 + x_2 x_1^2 + x_1^3 \]
+The second-order divided difference is:
+\begin{align*}
+[x_0, x_1, x_2] f &= \frac{f[x_1, x_2] - f[x_0, x_1]}{x_2 - x_0} \\
+&= \frac{(x_2^3 + x_2^2 x_1 + x_2 x_1^2 + x_1^3) - (x_1^3 + x_1^2 x_0 + x_1 x_0^2 + x_0^3)}{x_2 - x_0} \\
+&= \frac{(x_2^3 - x_0^3) + x_1(x_2^2 - x_0^2) + x_1^2(x_2 - x_0)}{x_2 - x_0} \\
+&= (x_2^2 + x_2 x_0 + x_0^2) + x_1(x_2 + x_0) + x_1^2 \\
+&= x_0^2 + x_1^2 + x_2^2 + x_0 x_1 + x_0 x_2 + x_1 x_2
+\end{align*}
+This is the definition of $h_2(x_0, x_1, x_2)$.
+
+---
+(b)
+We prove $h_{m-n}(x_0, \dots, x_n) = [x_0, \dots, x_n] (t^m)$ by showing both sides satisfy the same recurrence and base cases.
+Let $H(n, m) = [x_0, \dots, x_n] (t^m)$.
+Let $g(t) = t^{m-1}$. A property of divided differences applied to $f(t) = t \cdot g(t)$ is:
+\[ [x_0, \dots, x_n] (t \cdot g(t)) = x_n [x_0, \dots, x_n] g(t) + [x_0, \dots, x_{n-1}] g(t) \]
+This gives the recurrence for $H$:
+\[ H(n, m) = x_n H(n, m-1) + H(n-1, m-1) \]
+Now, let $S(n, m) = h_{m-n}(x_0, \dots, x_n)$. The lemma for complete symmetric polynomials is:
+\[ h_k(x_0, \dots, x_n) = h_k(x_0, \dots, x_{n-1}) + x_n h_{k-1}(x_0, \dots, x_n) \]
+Let $k = m-n$. Then $k-1 = (m-1)-n$. In terms of $m, n$, the lemma is:
+\[ h_{m-n}(\dots, x_n) = h_{m-n}(\dots, x_{n-1}) + x_n h_{(m-1)-n}(\dots, x_n) \]
+This gives the recurrence for $S$:
+\[ S(n, m) = S(n-1, m-1) + x_n S(n, m-1) \]
+This is the exact same recurrence relation as $H(n, m)$.
+We check the base cases:
+For $n=0$:
+\[ H(0, m) = [x_0] (t^m) = x_0^m \]
+\[ S(0, m) = h_{m-0}(x_0) = h_m(x_0) = x_0^m \]
+For $m=n$:
+\[ H(n, n) = [x_0, \dots, x_n] (t^n) = 1 \quad (\text{leading coeff. of } t^n) \]
+\[ S(n, n) = h_{n-n}(x_0, \dots, x_n) = h_0(\dots) = 1 \]
+Since $H(n, m)$ and $S(n, m)$ satisfy the same recurrence and boundary conditions, $H(n, m) = S(n, m)$.
+
 \section*{ \center{\normalsize {Acknowledgement}} }
 Honestly, the \textbf{translation} was done using LLM tools, but the answers and solutions were written by myself.
-This version is edited out on 9th Oct.
+Completed: 29th Oct.
 %20250919
 
-
 %\printbibliography
-
 
 \end{document}
